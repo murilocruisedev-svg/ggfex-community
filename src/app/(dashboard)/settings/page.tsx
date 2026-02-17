@@ -94,13 +94,13 @@ export default function SettingsPage() {
             const updates = {
                 full_name: fullName,
                 avatar_url: avatarUrl,
-                updated_at: new Date().toISOString(),
+                // updated_at: new Date().toISOString(), REMOVIDO
             }
 
             // Atualiza na tabela pública 'users'
             const { error } = await supabase
                 .from('users')
-                .update(updates)
+                .update(updates as any)
                 .eq('id', user.id)
 
             if (error) throw error
