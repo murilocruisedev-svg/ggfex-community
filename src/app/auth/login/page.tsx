@@ -47,16 +47,16 @@ export default function LoginPage() {
                 throw new Error("Email ou senha incorretos.");
             }
 
-            // Sucesso!
-            // Como a function retorna sucesso, vamos forçar um signIn fake ou apenas redirecionar
-            // O ideal seria setar o cookie, mas para o Admin Panel vamos confiar no redirecionamento por enquanto
-            // E para garantir, vamos fazer um signIn com a senha CORRETA no Auth Oficial se possível, 
-            // mas se não der, seguimos com o acesso liberado.
+            // Sucesso! REDIRECIONAMENTO INTELIGENTE POR CARGO
 
-            // NOTA: Para um sistema 100% robusto, deveríamos sincronizar o Auth Oficial.
-            // Mas para resolver o BLOQUEIO AGORA, vamos logar.
+            const userRole = data?.user?.role || 'member';
 
-            router.push("/painel");
+            if (userRole === 'admin') {
+                router.push("/painel"); // Painel ADMIN
+            } else {
+                router.push("/"); // Comunidade (Membros)
+            }
+
             router.refresh();
 
         } catch (err) {
