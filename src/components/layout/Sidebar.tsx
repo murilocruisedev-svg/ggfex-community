@@ -92,7 +92,7 @@ export function Sidebar() {
     }, [])
 
     return (
-        <div className="w-64 h-screen bg-[#050505] flex flex-col border-r border-white/5 fixed left-0 top-0 overflow-y-auto z-50">
+        <div className="h-full bg-[#050505] flex flex-col border-r border-white/5 overflow-y-auto">
             {/* Header */}
             <div className="p-6">
                 <h1 className="text-xl font-bold tracking-tight text-white font-heading">
@@ -214,7 +214,7 @@ export function Sidebar() {
                             ) : (
                                 <Link href="/settings" className="flex items-center text-xs text-gray-500 hover:text-white transition-colors mt-0.5">
                                     <User className="w-3 h-3 mr-1" />
-                                    Minha Conta
+                                    Membro
                                 </Link>
                             )}
                         </div>
