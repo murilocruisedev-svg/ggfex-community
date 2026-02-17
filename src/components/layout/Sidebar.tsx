@@ -20,6 +20,7 @@ interface UserProfile {
     email: string | undefined
     full_name?: string
     avatar_url?: string | null
+    role?: string // Adicionado
 }
 
 const navItems = [
@@ -72,7 +73,7 @@ export function Sidebar() {
                 // Tenta pegar avatar e nome atualizados da tabela users
                 const { data: profile } = await supabase
                     .from('users')
-                    .select('full_name, avatar_url')
+                    .select('full_name, avatar_url, role')
                     .eq('id', currentUser.id)
                     .single();
 
@@ -80,7 +81,8 @@ export function Sidebar() {
                 setUser({
                     email: currentUser.email,
                     full_name: profile?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
-                    avatar_url: profile?.avatar_url
+                    avatar_url: profile?.avatar_url,
+                    role: profile?.role // Adicionado
                 })
             }
         }
@@ -202,10 +204,19 @@ export function Sidebar() {
                             <p className="text-sm font-bold text-white truncate group-hover:text-[#F24405] transition-colors">
                                 {user.full_name}
                             </p>
-                            <Link href="/painel/settings" className="flex items-center text-xs text-gray-500 hover:text-white transition-colors mt-0.5">
-                                <Settings className="w-3 h-3 mr-1" />
-                                Configurações
-                            </Link>
+
+                            {/* Link Inteligente: Só Admin vai pro Painel */}
+                            {user.role === 'admin' ? (
+                                <Link href="/painel/settings" className="flex items-center text-xs text-gray-500 hover:text-white transition-colors mt-0.5">
+                                    <Settings className="w-3 h-3 mr-1" />
+                                    Painel Admin
+                                </Link>
+                            ) : (
+                                <span className="flex items-center text-xs text-gray-500 mt-0.5">
+                                    <User className="w-3 h-3 mr-1" />
+                                    Membro
+                                </span>
+                            )}
                         </div>
                     </div>
                 ) : (
