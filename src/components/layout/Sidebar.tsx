@@ -44,21 +44,42 @@ export function Sidebar() {
             }
         }
 
-        // 2. Fetch Current User
+        // 2. Fetch Current User (Support Custom Cookie Auth)
         async function fetchUser() {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
+            let currentUser = null;
+            let currentProfile = null;
+
+            // Tenta Auth Oficial
+            const { data: { user: authUser } } = await supabase.auth.getUser()
+
+            if (authUser) {
+                currentUser = authUser;
+            } else {
+                // Tenta Auth Customizado (Cookie)
+                try {
+                    const cookieMatch = document.cookie.match(/sb-custom-user=([^;]+)/);
+                    if (cookieMatch) {
+                        const userData = JSON.parse(decodeURIComponent(cookieMatch[1]));
+                        currentUser = userData;
+                        // O cookie já tem o objeto user
+                    }
+                } catch (e) {
+                    console.error("Erro ao ler cookie custom:", e);
+                }
+            }
+
+            if (currentUser) {
                 // Tenta pegar avatar e nome atualizados da tabela users
                 const { data: profile } = await supabase
                     .from('users')
                     .select('full_name, avatar_url')
-                    .eq('id', user.id)
+                    .eq('id', currentUser.id)
                     .single();
 
                 // Tenta pegar metadados ou usa email como fallback
                 setUser({
-                    email: user.email,
-                    full_name: profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0],
+                    email: currentUser.email,
+                    full_name: profile?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
                     avatar_url: profile?.avatar_url
                 })
             }

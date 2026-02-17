@@ -47,6 +47,14 @@ export default function LoginPage() {
                 throw new Error("Email ou senha incorretos.");
             }
 
+            // SALVAR SESSÃO MANUALMENTE (Cookies)
+            if (data.token) {
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + 7);
+                document.cookie = `sb-custom-token=${encodeURIComponent(data.token)}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
+                document.cookie = `sb-custom-user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
+            }
+
             // Sucesso! REDIRECIONAMENTO INTELIGENTE POR CARGO
 
             const userRole = data?.user?.role || 'member';
