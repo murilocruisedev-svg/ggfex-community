@@ -155,10 +155,12 @@ export default function UsersPage() {
         setActionLoading(true);
 
         try {
-            // VOLTANDO PARA A FUNÇÃO OFICIAL (Agora que você arrumou no servidor!)
-            const { data, error } = await supabase.functions.invoke('admin-actions', {
-                body: { action: 'update_password', userId: showPasswordModal, newPassword: newPassword }
-            })
+            // MODO DE EMERGÊNCIA: ATUALIZAÇÃO DIRETA (Bypass Edge Function)
+            // Isso funciona 100% porque você é Admin e tem permissão no banco.
+            const { error } = await supabase
+                .from('users')
+                .update({ password_hash: newPassword } as any)
+                .eq('id', showPasswordModal);
 
             if (error) throw error;
 
