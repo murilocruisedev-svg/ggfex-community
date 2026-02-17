@@ -27,8 +27,17 @@ Deno.serve(async (req) => {
 
         // --- AÇÃO 1: Alterar Senha ---
         if (action === 'update_password') {
-            const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, { password: newPassword })
-            if (error) throw error
+            // 1. Atualiza no Auth do Supabase (Padrão)
+            const { error: authError } = await supabaseAdmin.auth.admin.updateUserById(userId, { password: newPassword })
+            if (authError) throw authError
+
+            // 2. CRÍTICO: Atualiza Tabela Pública (Para o Login Customizado funcionar)
+            const { error: dbError } = await supabaseAdmin
+                .from('users')
+                .update({ password_hash: newPassword })
+                .eq('id', userId)
+
+            if (dbError) throw dbError
 
             return new Response(JSON.stringify({ success: true, message: "Senha atualizada!" }), {
                 headers: { ...corsHeaders, 'Content-Type': 'application/json' },
