@@ -45,7 +45,7 @@ export default function CategoriesPage() {
         try {
             const { error } = await supabase
                 .from("categories")
-                .insert([{ name: newCategory.trim() }]);
+                .insert([{ name: newCategory.trim() } as any]);
 
             if (error) throw error;
 
