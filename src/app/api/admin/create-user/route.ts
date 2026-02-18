@@ -81,9 +81,28 @@ export async function POST(request: Request) {
                 });
 
                 if (createError) {
-                    return NextResponse.json({ error: createError.message }, { status: 400 });
+                    // Erro: Usuário já existe no Auth mas não na Tabela Pública
+                    if (createError.message?.toLowerCase().includes("already")) {
+                        console.warn("Usuário Zumbi detectado (Auth sem Tabela). Tentando recuperar...");
+
+                        // Tenta encontrar o ID listando usuários (Fallback pesado mas necessário)
+                        const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+                        const zombieUser = listData?.users.find(u => u.email?.toLowerCase() === email.toLowerCase());
+
+                        if (zombieUser) {
+                            userId = zombieUser.id;
+                            // Força a senha temporária para garantir acesso
+                            await supabaseAdmin.auth.admin.updateUserById(userId, { password: tempPassword });
+                            console.log("Zumbi recuperado e senha resetada.");
+                        } else {
+                            return NextResponse.json({ error: "Erro crítico: Email duplicado no Auth mas não encontrado. Contate suporte." }, { status: 400 });
+                        }
+                    } else {
+                        return NextResponse.json({ error: createError.message }, { status: 400 });
+                    }
+                } else {
+                    userId = createData.user?.id;
                 }
-                userId = createData.user?.id;
             }
         }
 
