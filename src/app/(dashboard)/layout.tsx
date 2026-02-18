@@ -15,41 +15,28 @@ export default function DashboardLayout({
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative">
 
-            {/* Mobile Header Toggle */}
-            <div className="md:hidden fixed top-4 right-4 z-[60]">
-                <button
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="p-2 bg-[#F24405] text-white rounded-lg shadow-lg"
-                >
-                    {isMobileMenuOpen ? <X /> : <Menu />}
-                </button>
-            </div>
-
-            {/* Sidebar (Passando estado) */}
+            {/* Sidebar (Mobile: Slide-in from Left / Desktop: Relative) */}
             <div className={`
-                fixed inset-y-0 left-0 z-50 w-64 h-full transform transition-transform duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-50 w-64 h-full transform transition-transform duration-300 ease-in-out bg-[#050505] shadow-2xl md:shadow-none border-r border-white/5
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
                 md:relative md:translate-x-0
             `}>
                 <Sidebar />
             </div>
 
-            {/* Overlay para fechar no mobile */}
+            {/* Overlay Mobile */}
             {isMobileMenuOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden animate-fade-in"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
             )}
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 w-full">
-                <div className="hidden md:block">
-                    <Header />
-                </div>
-                {/* Mobile Header Placeholder se precisar */}
+                <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
 
-                <main className="flex-1 p-4 md:p-6 w-full max-w-[100vw] overflow-x-hidden">
+                <main className="flex-1 p-3 md:p-6 w-full max-w-[100vw] overflow-x-hidden">
                     {children}
                 </main>
             </div>
