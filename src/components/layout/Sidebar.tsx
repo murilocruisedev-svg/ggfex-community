@@ -120,18 +120,23 @@ export function Sidebar() {
                     <div className="space-y-1">
                         {navItems.map((item) => {
                             const Icon = item.icon
-                            // Ativo se for home ou library
                             const isActive = pathname === item.href
+                            const isSoundEffects = item.name === 'Sound Effects'
 
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.href}
                                     className={cn(
-                                        "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border border-transparent",
+                                        "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border",
                                         isActive
                                             ? "bg-[#F24405] text-white shadow-lg shadow-orange-500/20"
-                                            : "text-gray-400 hover:text-white hover:bg-white/5 hover:border-white/5"
+                                            : "text-gray-400 hover:text-white hover:bg-white/5",
+
+                                        // Force orange border for Sound Effects item
+                                        isSoundEffects
+                                            ? "border-[#F24405]/50 hover:border-[#F24405]"
+                                            : isActive ? "border-transparent" : "border-transparent hover:border-white/5"
                                     )}
                                 >
                                     <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-white" : "text-gray-500 group-hover:text-white")} />
