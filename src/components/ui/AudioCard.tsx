@@ -23,6 +23,7 @@ interface AudioCardProps {
 export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false)
     const audioRef = useRef<HTMLAudioElement>(null)
 
     const togglePlay = () => {
@@ -42,12 +43,46 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
         }
     }
 
-    const handleDownload = (e: React.MouseEvent) => {
+    const handleDownload = async (e: React.MouseEvent) => {
         if (isLocked) {
             e.preventDefault()
             alert("🔒 Conteúdo Exclusivo!\n\nFaça login ou assine um plano Premium para baixar este efeito sonoro em alta qualidade.");
-            // Opcional: router.push('/plans')
             return;
+        }
+
+        e.preventDefault();
+        if (isDownloading) return;
+
+        try {
+            setIsDownloading(true);
+
+            // 1. Fetch do arquivo (blob)
+            const response = await fetch(sound.file_url);
+            if (!response.ok) throw new Error("Erro ao baixar arquivo");
+
+            const blob = await response.blob();
+
+            // 2. Criar URL temporária
+            const url = window.URL.createObjectURL(blob);
+
+            // 3. Criar link temporário e clicar
+            const link = document.createElement('a');
+            link.href = url;
+            // Tenta extrair o nome do arquivo da URL ou usa o nome do som
+            const fileName = sound.name ? `${sound.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp3` : 'audio.mp3';
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+
+            // 4. Limpeza
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error("Erro no download:", error);
+            alert("Não foi possível iniciar o download. Tente novamente.");
+        } finally {
+            setIsDownloading(false);
         }
     }
 
@@ -144,15 +179,18 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
                         <span className="hidden md:inline">Bloqueado</span>
                     </button>
                 ) : (
-                    <a
-                        href={sound.file_url}
-                        download
-                        onClick={handleDownload} // Para futura logica de analytics
-                        className="flex-shrink-0 flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-[#F24405] hover:text-white text-gray-400 transition-all text-xs font-bold border border-white/5 hover:shadow-[0_0_15px_rgba(242,68,5,0.4)] active:scale-95 ml-2"
+                    <button
+                        onClick={handleDownload}
+                        disabled={isDownloading}
+                        className="flex-shrink-0 flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-[#F24405] hover:text-white text-gray-400 transition-all text-xs font-bold border border-white/5 hover:shadow-[0_0_15px_rgba(242,68,5,0.4)] active:scale-95 ml-2 disabled:opacity-50 disabled:cursor-wait"
                     >
-                        <Download className="h-3.5 w-3.5" />
-                        <span className="hidden md:inline">Baixar</span>
-                    </a>
+                        {isDownloading ? (
+                            <div className="h-3.5 w-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                            <Download className="h-3.5 w-3.5" />
+                        )}
+                        <span className="hidden md:inline">{isDownloading ? 'Baixando...' : 'Baixar'}</span>
+                    </button>
                 )}
             </div>
         </div>
