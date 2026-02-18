@@ -12,37 +12,4 @@ body {
   background-color: #050505;
   color: var(--foreground);
   overflow-x: hidden;
-  /* Firefox Scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: #262626 #050505;
-}
-
-/* Chrome, Edge, Safari Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #262626;
-  border-radius: 99px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #404040;
-}
-
-@layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
 }
