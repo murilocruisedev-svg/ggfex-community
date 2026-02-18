@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
@@ -6,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { AudioCard } from '@/components/ui/AudioCard'
 import { supabase } from '@/lib/supabase/client'
 import { Loader2 } from 'lucide-react'
+import { WalkingLoader } from '@/components/ui/WalkingLoader'
 
 // Definindo o tipo manualmente para garantir compatibilidade caso o types/database esteja desatualizado
 interface SoundEffect {
@@ -87,9 +87,11 @@ function LibraryContent() {
                     <p>Carregando biblioteca...</p>
                 </div>
             ) : sounds.length === 0 ? (
-                <div className="text-center p-24 bg-white/5 rounded-2xl border border-white/5">
-                    <p className="text-xl text-gray-400 font-medium">Nenhum som encontrado nesta categoria.</p>
-                    <p className="text-sm text-gray-500 mt-2">Tente limpar os filtros ou buscar outra coisa.</p>
+                <div className="flex flex-col items-center justify-center p-12 md:p-24 bg-[#0A0A0A] rounded-3xl border border-white/5">
+                    <WalkingLoader />
+                    <p className="text-sm text-gray-500 mt-8 max-w-sm mx-auto text-center animate-pulse">
+                        Em andamento...
+                    </p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
