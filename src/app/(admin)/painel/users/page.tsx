@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { Search, User, MoreVertical, ShieldCheck, ShieldAlert, Calendar, Lock, Ban, CheckCircle, Trash2, X, Plus } from 'lucide-react'
+import { Search, User, MoreVertical, ShieldCheck, ShieldAlert, Calendar, Lock, Ban, CheckCircle, Trash2, X, Plus, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
@@ -226,6 +226,36 @@ export default function UsersPage() {
         }
     }
 
+    const handleDeleteUser = async (userId: string) => {
+        if (!confirm("⚠️ ATENÇÃO: Essa ação é irreversível!\n\nTem certeza que deseja EXCLUIR este usuário permanentemente?")) return;
+
+        setActionLoading(true);
+        try {
+            const response = await fetch('/api/admin/delete-user', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Erro ao excluir usuário");
+            }
+
+            // Remove da lista local
+            setUsers(users.filter(u => u.id !== userId));
+            setOpenMenuId(null);
+            alert("Usuário excluído com sucesso!");
+
+        } catch (error: any) {
+            console.error(error);
+            alert(`Erro ao excluir: ${error.message}`);
+        } finally {
+            setActionLoading(false);
+        }
+    }
+
     const filteredUsers = users.filter(user => {
         const matchesSearch = (user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) || '') ||
             (user.email?.toLowerCase().includes(searchTerm.toLowerCase()) || '')
@@ -430,8 +460,13 @@ export default function UsersPage() {
                         </button>
                     )}
 
-                    <button className="w-full text-left px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors border-t border-white/5 mt-1">
-                        <Trash2 className="w-3.5 h-3.5" /> Excluir
+                    <button
+                        onClick={() => handleDeleteUser(activeUser.id)}
+                        disabled={actionLoading}
+                        className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-white/5 mt-1 disabled:opacity-50"
+                    >
+                        {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                        Excluir Permanentemente
                     </button>
                 </div>
             )}
