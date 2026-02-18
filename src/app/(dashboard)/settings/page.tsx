@@ -198,6 +198,7 @@ export default function SettingsPage() {
                             />
                         </div>
 
+
                         {/* Botão Salvar */}
                         <div className="pt-4 border-t border-white/5 flex justify-end">
                             <button
@@ -217,6 +218,23 @@ export default function SettingsPage() {
                             </button>
                         </div>
 
+                    </div>
+
+                    {/* Zona de Logout */}
+                    <div className="mt-8 pt-8 border-t border-white/5">
+                        <h3 className="text-red-500 font-bold mb-4">Sessão</h3>
+                        <button
+                            onClick={async () => {
+                                if (!confirm("Tem certeza que deseja sair?")) return;
+                                await supabase.auth.signOut();
+                                document.cookie = "sb-custom-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                                document.cookie = "sb-custom-user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                                window.location.href = '/auth/login';
+                            }}
+                            className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold py-4 rounded-xl border border-red-500/20 transition-all flex items-center justify-center gap-2"
+                        >
+                            Sair da Conta
+                        </button>
                     </div>
                 </div>
 

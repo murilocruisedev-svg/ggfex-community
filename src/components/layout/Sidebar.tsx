@@ -197,39 +197,31 @@ export function Sidebar() {
             {/* User Profile Section - Footer */}
             <div className="p-4 border-t border-white/5 bg-[#080808]">
                 {user ? (
-                    <div className="flex flex-col gap-3">
-                        <div className="flex items-center gap-3 p-2 rounded-xl transition-colors hover:bg-white/5 cursor-pointer">
-                            {/* Avatar */}
-                            {user.avatar_url ? (
-                                <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-orange-500/10 flex-shrink-0">
-                                    <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                                </div>
-                            ) : (
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F24405] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-orange-500/20 flex-shrink-0">
-                                    {user.full_name?.[0].toUpperCase() || 'U'}
-                                </div>
-                            )}
+                    <Link
+                        href={user.role === 'admin' ? "/painel/settings" : "/settings"}
+                        className="flex items-center gap-3 group cursor-pointer hover:bg-white/5 p-2 rounded-xl transition-colors"
+                    >
+                        {/* Avatar Placeholder com Gradiente */}
+                        {user.avatar_url ? (
+                            <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-orange-500/10 flex-shrink-0">
+                                <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                            </div>
+                        ) : (
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F24405] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-orange-500/20 flex-shrink-0">
+                                {user.full_name?.[0].toUpperCase() || 'U'}
+                            </div>
+                        )}
 
-                            <div className="flex-1 overflow-hidden min-w-0">
-                                <p className="text-sm font-bold text-white truncate hover:text-[#F24405] transition-colors">
-                                    {user.full_name}
-                                </p>
-                                <span className="text-xs text-gray-500 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                    Online
-                                </span>
+                        <div className="flex-1 overflow-hidden min-w-0">
+                            <p className="text-sm font-bold text-white truncate group-hover:text-[#F24405] transition-colors">
+                                {user.full_name}
+                            </p>
+                            <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                                <Settings className="w-3 h-3 mr-1" />
+                                <span>Configurações</span>
                             </div>
                         </div>
-
-                        {/* Botão Logout */}
-                        <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center justify-center px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 rounded-xl text-xs font-bold transition-all border border-red-500/10 hover:border-red-500/30 group"
-                        >
-                            <LogOut className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                            Sair da Conta
-                        </button>
-                    </div>
+                    </Link>
                 ) : (
                     <Link
                         href="/auth/login"
