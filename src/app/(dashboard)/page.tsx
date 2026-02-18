@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { ArrowRight, Sparkles, Music } from 'lucide-react'
 import { WalkingLoader } from '@/components/ui/WalkingLoader'
 
-// Definindo tipo manual para garantir compatibilidade
+// Definindo tipos manuais para garantir compatibilidade
 interface SoundEffect {
     id: number
     name: string
@@ -18,8 +18,15 @@ interface SoundEffect {
     created_at: string
 }
 
+interface Category {
+    id: number
+    name: string
+}
+
 export default function HomePage() {
     const [allSounds, setAllSounds] = useState<SoundEffect[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<any>(null)
 
@@ -28,15 +35,23 @@ export default function HomePage() {
             setLoading(true)
             try {
                 // 1. Busca Sons
-                const { data, error } = await supabase
+                const { data: soundsData, error: soundsError } = await supabase
                     .from('sound_effects')
                     .select('*')
                     .order('created_at', { ascending: false })
 
-                if (error) throw error
-                setAllSounds(data || [])
+                if (soundsError) throw soundsError
+                setAllSounds(soundsData || [])
 
-                // 2. Busca Usuário (Auth Oficial ou Cookie Customizado)
+                // 2. Busca Categorias
+                const { data: categoriesData } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('name')
+
+                setCategories(categoriesData || [])
+
+                // 3. Busca Usuário (Auth Oficial ou Cookie Customizado)
                 const { data: { session } } = await supabase.auth.getSession()
 
                 if (session?.user) {
@@ -64,12 +79,16 @@ export default function HomePage() {
         fetchData()
     }, [])
 
+    const filteredSounds = selectedCategoryId
+        ? allSounds.filter(s => s.category_id === selectedCategoryId)
+        : allSounds;
+
     return (
         <div className="space-y-6 md:space-y-12 pb-12 font-sans bg-[#050505]">
 
             {/* Banner Compacto - Estilo Aligno - 100% Responsivo */}
             <section className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-r from-[#0E0E0E] to-[#121212] border border-white/5 shadow-2xl p-6 md:h-[220px] flex items-center group transition-all duration-700 hover:border-[#FF6130]/20">
-
+                {/* ... (Banner content unchanged) ... */}
                 {/* Glow Effects (Fundo) */}
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
 
@@ -114,7 +133,7 @@ export default function HomePage() {
                         <h2 className="text-xl md:text-2xl text-white font-serif italic flex items-center gap-3">
                             Galeria Completa
                             <span className="text-[10px] md:text-xs font-sans font-bold text-[#FF6130] bg-[#FF6130]/10 px-2 py-1 rounded border border-[#FF6130]/20 not-italic">
-                                {allSounds.length} Assets
+                                {filteredSounds.length} Assets
                             </span>
                         </h2>
                         <p className="text-xs md:text-sm text-gray-500 mt-1 md:mt-2 font-medium tracking-wide">
@@ -124,9 +143,22 @@ export default function HomePage() {
 
                     {/* Filtros Mobile (Scroll Horizontal se precisar) */}
                     <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                        {['Todos', 'Impactos', 'Ambiente'].map((filter, i) => (
-                            <button key={filter} className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all border ${i === 0 ? 'bg-white text-black border-white' : 'bg-[#111] text-gray-400 border-white/10 hover:text-white'}`}>
-                                {filter}
+                        {/* Botão Todos */}
+                        <button
+                            onClick={() => setSelectedCategoryId(null)}
+                            className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all border ${selectedCategoryId === null ? 'bg-white text-black border-white' : 'bg-[#111] text-gray-400 border-white/10 hover:text-white hover:bg-white/5'}`}
+                        >
+                            Todos
+                        </button>
+
+                        {/* Botões de Categoria */}
+                        {categories.map((category) => (
+                            <button
+                                key={category.id}
+                                onClick={() => setSelectedCategoryId(category.id)}
+                                className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all border ${selectedCategoryId === category.id ? 'bg-white text-black border-white' : 'bg-[#111] text-gray-400 border-white/10 hover:text-white hover:bg-white/5'}`}
+                            >
+                                {category.name}
                             </button>
                         ))}
                     </div>
@@ -138,9 +170,9 @@ export default function HomePage() {
                             <div key={i} className="aspect-[4/3] bg-[#111] rounded-2xl animate-pulse border border-white/5"></div>
                         ))}
                     </div>
-                ) : allSounds.length > 0 ? (
+                ) : filteredSounds.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 pb-20">
-                        {allSounds.map((sound, index) => (
+                        {filteredSounds.map((sound, index) => (
                             <div
                                 key={sound.id}
                                 className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
