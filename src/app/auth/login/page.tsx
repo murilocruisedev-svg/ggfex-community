@@ -115,7 +115,7 @@ export default function LoginPage() {
                     </div>
                     <div className="text-center">
                         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
-                            Bem-vindo de volta!
+                            Bem-vindo(a) de volta!
                         </h1>
                         <p className="text-[#888] text-sm md:text-base font-medium">
                             Faça login para acessar a comunidade
