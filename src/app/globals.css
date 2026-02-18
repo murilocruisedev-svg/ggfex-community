@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #050505;
+  --color-foreground: #ededed;
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-instrument), serif;
+  /* Se tiver font-heading, adicione aqui */
+}
+
+/* Base Styles */
 :root {
   --background: #050505;
   --foreground: #ededed;
@@ -7,15 +17,15 @@
 
 html,
 body {
-  background-color: #050505;
+  background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  /* Firefox Scrollbar */
+  /* Scrollbar Dark Global */
   scrollbar-width: thin;
   scrollbar-color: #262626 #050505;
 }
 
-/* Chrome, Edge, Safari Scrollbar */
+/* Chrome/Edge Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -35,11 +45,11 @@ body {
 }
 
 @layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
-  .scrollbar-hide {
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
