@@ -118,8 +118,7 @@ export async function POST(request: Request) {
                 email: email,
                 full_name: name,
                 role: 'member', // Assinante
-                status: 'active',
-                plan: 'pro',
+                subscription_status: 'active',
                 created_at: new Date().toISOString()
             });
 
