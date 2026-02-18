@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { Search, User, MoreVertical, ShieldCheck, ShieldAlert, Calendar, Lock, Ban, CheckCircle, Trash2, X } from 'lucide-react'
+import { Search, User, MoreVertical, ShieldCheck, ShieldAlert, Calendar, Lock, Ban, CheckCircle, Trash2, X, Plus } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
@@ -29,6 +29,11 @@ export default function UsersPage() {
 
     const [showPasswordModal, setShowPasswordModal] = useState<string | null>(null)
     const [newPassword, setNewPassword] = useState('')
+
+    // Estado para Criar Assinante
+    const [showCreateModal, setShowCreateModal] = useState(false)
+    const [newSubscriber, setNewSubscriber] = useState({ name: '', email: '' })
+
     const [actionLoading, setActionLoading] = useState(false)
 
     const menuRef = useRef<HTMLDivElement>(null)
@@ -176,6 +181,38 @@ export default function UsersPage() {
         }
     }
 
+    const handleCreateSubscriber = async () => {
+        if (!newSubscriber.email || !newSubscriber.name) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        setActionLoading(true);
+        try {
+            const { data, error } = await supabase.functions.invoke('admin-actions', {
+                body: {
+                    action: 'create_subscriber',
+                    newEmail: newSubscriber.email,
+                    newName: newSubscriber.name
+                }
+            });
+
+            if (error) throw error;
+            if (data?.error) throw new Error(data.error);
+
+            alert('Assinante criado com sucesso! 🎉\nO usuário já pode fazer login com o email dele (via Código).');
+            setShowCreateModal(false);
+            setNewSubscriber({ name: '', email: '' });
+            fetchUsers(); // Recarrega lista
+
+        } catch (error: any) {
+            console.error(error);
+            alert(`Erro ao criar assinante: ${error.message}`);
+        } finally {
+            setActionLoading(false);
+        }
+    }
+
     const filteredUsers = users.filter(user => {
         const matchesSearch = (user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) || '') ||
             (user.email?.toLowerCase().includes(searchTerm.toLowerCase()) || '')
@@ -205,7 +242,15 @@ export default function UsersPage() {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col md:flex-row items-center gap-4">
+                    <button
+                        onClick={() => setShowCreateModal(true)}
+                        className="flex items-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-2 px-4 rounded-xl shadow-lg shadow-orange-500/20 transition-transform hover:scale-105 active:scale-95 text-sm"
+                    >
+                        <Plus className="w-4 h-4" />
+                        Novo Assinante
+                    </button>
+
                     <div className="flex bg-[#111] p-1 rounded-xl border border-white/10">
                         {[
                             { id: 'all', label: 'Todos' },
@@ -408,6 +453,58 @@ export default function UsersPage() {
                                 className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all"
                             >
                                 {actionLoading ? 'Salvando...' : 'Salvar Nova Senha'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Criar Assinante */}
+            {showCreateModal && (
+                <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in zoom-in-95">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                <Plus className="w-6 h-6 text-[#F24405]" /> Novo Assinante
+                            </h3>
+                            <button onClick={() => setShowCreateModal(false)} className="text-gray-500 hover:text-white">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">Nome Completo</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    placeholder="Ex: João da Silva"
+                                    value={newSubscriber.name}
+                                    onChange={(e) => setNewSubscriber({ ...newSubscriber, name: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-1">E-mail</label>
+                                <input
+                                    type="email"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    placeholder="Ex: joao@email.com"
+                                    value={newSubscriber.email}
+                                    onChange={(e) => setNewSubscriber({ ...newSubscriber, email: e.target.value })}
+                                />
+                            </div>
+                            <button
+                                onClick={handleCreateSubscriber}
+                                disabled={actionLoading || !newSubscriber.email || !newSubscriber.name}
+                                className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                            >
+                                {actionLoading ? (
+                                    <>Criando...</>
+                                ) : (
+                                    <>
+                                        <CheckCircle className="w-5 h-5" /> Confirmar Cadastro
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>

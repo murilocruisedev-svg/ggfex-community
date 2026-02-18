@@ -112,6 +112,42 @@ Deno.serve(async (req) => {
             })
         }
 
+        // --- AÇÃO 3.5: Criar Novo Assinante (Subscriber) ---
+        if (action === 'create_subscriber') {
+            // 1. Gera senha aleatória (já que vai usar OTP)
+            const tempPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+
+            // 2. Cria usuário no Auth do Supabase
+            const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+                email: newEmail,
+                password: tempPassword,
+                email_confirm: true, // Já confirma o email para permitir login imediato
+                user_metadata: { full_name: newName }
+            })
+
+            if (createError) throw createError
+
+            // 3. Insere na tabela 'users' pública
+            const { error: dbError } = await supabaseAdmin
+                .from('users')
+                .upsert({
+                    id: newUser.user.id,
+                    email: newEmail,
+                    full_name: newName,
+                    role: 'member', // CRIA COMO MEMBRO (Assinante)
+                    subscription_status: 'active', // Acesso liberado
+                    subscription_expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 100)), // "Vitalício" ou Longo Prazo se criado manual
+                    created_at: new Date().toISOString()
+                })
+
+            if (dbError) throw dbError
+
+            return new Response(JSON.stringify({ success: true, message: "Assinante criado com sucesso!" }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 200,
+            })
+        }
+
         // --- AÇÃO 4: Listar Usuários (Bypass RLS) ---
         if (action === 'list_users') {
             const { data: users, error } = await supabaseAdmin
