@@ -20,25 +20,64 @@ export default function SettingsPage() {
     useEffect(() => {
         async function getProfile() {
             setLoading(true);
+
+            let foundUser = null;
+            let foundProfile = null;
+
+            // 1. Tenta pegar do Auth Oficial
             const { data: { user } } = await supabase.auth.getUser();
 
             if (user) {
-                setUserId(user.id);
-                // Tenta pegar da tabela users primeiro (mais confiável para customizações)
+                foundUser = user;
+                // Tenta pegar da tabela users primeiro
                 const { data: profile } = await supabase
                     .from('users')
                     .select('*')
                     .eq('id', user.id)
                     .single();
 
-                if (profile) {
-                    setFullName(profile.full_name || user.user_metadata?.full_name || '');
-                    setAvatarUrl(profile.avatar_url); // Assumindo que criamos essa coluna ou vamos criar
-                } else {
-                    setFullName(user.user_metadata?.full_name || '');
+                foundProfile = profile;
+            } else {
+                // 2. Fallback: Cookie Customizado
+                try {
+                    const cookieMatch = document.cookie.match(/sb-custom-user=([^;]+)/);
+                    if (cookieMatch) {
+                        const userData = JSON.parse(decodeURIComponent(cookieMatch[1]));
+                        if (userData && userData.id) {
+                            foundUser = userData;
+                            // Se o cookie já tiver dados de profile, ou se precisarmos buscar
+                            // Idealmente, se tivermos o ID, podemos tentar buscar na tabela 'users' também,
+                            // mas assumindo que o cookie tem o básico, usamos ele.
+                            // Mas para garantir, tentamos buscar no banco se tivermos o ID do cookie
+                            const { data: profile } = await supabase
+                                .from('users')
+                                .select('*')
+                                .eq('id', userData.id)
+                                .single();
+
+                            foundProfile = profile || {
+                                full_name: userData.full_name || userData.user_metadata?.full_name,
+                                avatar_url: userData.avatar_url
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.error("Erro ao ler cookie no Settings", e);
                 }
-                setUser(user);
             }
+
+            if (foundUser) {
+                setUserId(foundUser.id);
+                setUser(foundUser);
+
+                if (foundProfile) {
+                    setFullName(foundProfile.full_name || foundUser.user_metadata?.full_name || '');
+                    setAvatarUrl(foundProfile.avatar_url);
+                } else {
+                    setFullName(foundUser.user_metadata?.full_name || '');
+                }
+            }
+
             setLoading(false);
         }
 
@@ -56,8 +95,11 @@ export default function SettingsPage() {
                 full_name: fullName,
             }
 
-            // 1. Atualiza na tabela users
-            const { error } = await supabase.from('users').upsert(updates);
+            // 1. Atualiza na tabela users (Usa update ao invés de upsert para evitar erro de tipo insert)
+            const { error } = await supabase
+                .from('users')
+                .update(updates)
+                .eq('id', userId);
             if (error) throw error;
 
             // 2. Atualiza metadados do Auth (para fallback)
@@ -108,11 +150,11 @@ export default function SettingsPage() {
             // 3. Salvar URL no perfil do usuário
             const { error: updateError } = await supabase
                 .from('users')
-                .upsert({
-                    id: userId,
+                .update({
                     email: user?.email,
                     avatar_url: publicUrl,
-                });
+                })
+                .eq('id', userId);
 
             if (updateError) throw updateError;
 

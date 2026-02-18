@@ -13,6 +13,8 @@ export interface Database {
                 Row: {
                     id: string
                     email: string
+                    full_name: string | null
+                    avatar_url: string | null
                     // We don't expose password_hash to the frontend usually, but for completeness of the type definition based on SQL
                     role: 'member' | 'admin'
                     subscription_status: 'active' | 'inactive' | 'cancelled'
@@ -22,6 +24,8 @@ export interface Database {
                 Insert: {
                     id?: string
                     email: string
+                    full_name?: string | null
+                    avatar_url?: string | null
                     password_hash: string
                     role?: 'member' | 'admin'
                     subscription_status?: 'active' | 'inactive' | 'cancelled'
@@ -31,6 +35,8 @@ export interface Database {
                 Update: {
                     id?: string
                     email?: string
+                    full_name?: string | null
+                    avatar_url?: string | null
                     password_hash?: string
                     role?: 'member' | 'admin'
                     subscription_status?: 'active' | 'inactive' | 'cancelled'
