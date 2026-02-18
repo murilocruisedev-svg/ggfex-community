@@ -35,20 +35,48 @@ export function AdminSidebar() {
 
     useEffect(() => {
         const getUser = async () => {
+            let foundUser = null;
+            let foundProfile = null;
+
+            // 1. Tenta pegar do Auth Oficial do Supabase
             const { data: { user } } = await supabase.auth.getUser();
+
             if (user) {
+                foundUser = user;
                 // Tenta pegar avatar e nome atualizados da tabela users
                 const { data: profile } = await supabase
                     .from('users')
                     .select('full_name, avatar_url')
                     .eq('id', user.id)
                     .single();
+                foundProfile = profile;
+            } else {
+                // 2. Fallback: Cookie Customizado (Igual ao AuthGuard)
+                // Isso resolve o problema visual se o Auth do Supabase perder sessão mas o cookie persistir
+                try {
+                    const cookieMatch = document.cookie.match(/sb-custom-user=([^;]+)/);
+                    if (cookieMatch) {
+                        const userData = JSON.parse(decodeURIComponent(cookieMatch[1]));
+                        if (userData && userData.id) {
+                            foundUser = userData;
+                            // Se o cookie tiver dados de profile, usamos
+                            foundProfile = {
+                                full_name: userData.full_name || userData.user_metadata?.full_name,
+                                avatar_url: userData.avatar_url
+                            };
+                        }
+                    }
+                } catch (e) {
+                    console.error("Erro ao ler cookie no Sidebar", e);
+                }
+            }
 
+            if (foundUser) {
                 setUser({
-                    id: user.id,
-                    email: user.email,
-                    full_name: profile?.full_name || user.user_metadata?.full_name,
-                    avatar_url: profile?.avatar_url
+                    id: foundUser.id,
+                    email: foundUser.email,
+                    full_name: foundProfile?.full_name || foundUser.user_metadata?.full_name,
+                    avatar_url: foundProfile?.avatar_url
                 });
             }
         };
