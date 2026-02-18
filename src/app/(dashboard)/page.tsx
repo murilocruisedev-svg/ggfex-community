@@ -65,7 +65,7 @@ export default function HomePage() {
     }, [])
 
     return (
-        <div className="space-y-6 md:space-y-12 pb-24 font-sans bg-[#050505]">
+        <div className="space-y-6 md:space-y-12 pb-12 font-sans bg-[#050505]">
 
             {/* Banner Compacto - Estilo Aligno - 100% Responsivo */}
             <section className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-r from-[#0E0E0E] to-[#121212] border border-white/5 shadow-2xl p-6 md:h-[220px] flex items-center group transition-all duration-700 hover:border-[#FF6130]/20">
