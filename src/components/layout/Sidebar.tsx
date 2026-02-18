@@ -91,8 +91,22 @@ export function Sidebar() {
         fetchUser()
     }, [])
 
+    const handleLogout = async () => {
+        // 1. Supabase SignOut
+        await supabase.auth.signOut()
+
+        // 2. Limpar Cookies
+        document.cookie = "sb-custom-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
+        document.cookie = "sb-custom-user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
+        document.cookie = "sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
+
+        // 3. Redirecionar
+        window.location.href = '/auth/login'
+    }
+
     return (
         <div className="h-full bg-[#050505] flex flex-col border-r border-white/5 overflow-y-auto">
+            {/* ... (Header e Nav: Inalterado) ... */}
             {/* Header */}
             <div className="p-6">
                 <h1 className="text-xl font-bold tracking-tight text-white font-heading">
@@ -128,10 +142,10 @@ export function Sidebar() {
                     </div>
                 </div>
 
-                {/* Botão Comunidade (WhatsApp) */}
+                {/* Botão Comunidade (WhatsApp) - Mantendo a mesma lógica */}
                 <div>
                     <Link
-                        href="https://whatsapp.com" // Link placeholder
+                        href="https://whatsapp.com"
                         target="_blank"
                         className="flex items-center px-4 py-3 text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl hover:bg-green-500/20 transition-all group"
                     >
@@ -140,7 +154,7 @@ export function Sidebar() {
                     </Link>
                 </div>
 
-                {/* Categorias (Estilo Pasta/Diretório) */}
+                {/* Categorias - Mantendo a mesma lógica */}
                 <div>
                     <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <Layers className="w-3 h-3" />
@@ -150,7 +164,6 @@ export function Sidebar() {
                         {categories.length === 0 ? (
                             <div className="px-4 py-2 space-y-2">
                                 <div className="h-8 bg-white/5 rounded-lg w-full animate-pulse" />
-                                <div className="h-8 bg-white/5 rounded-lg w-3/4 animate-pulse" />
                             </div>
                         ) : (
                             categories.map((category) => {
@@ -172,11 +185,6 @@ export function Sidebar() {
                                             isActive ? "text-[#F24405] fill-[#F24405]/20" : "text-gray-600 group-hover:text-gray-400"
                                         )} />
                                         <span className="relative z-10">{category.name}</span>
-
-                                        {/* Efeito Hover sutil */}
-                                        {!isActive && (
-                                            <div className="absolute inset-0 bg-white/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 pointer-events-none" />
-                                        )}
                                     </Link>
                                 )
                             })
@@ -185,39 +193,42 @@ export function Sidebar() {
                 </div>
             </nav>
 
+
             {/* User Profile Section - Footer */}
             <div className="p-4 border-t border-white/5 bg-[#080808]">
                 {user ? (
-                    <div className="flex items-center gap-3 group cursor-pointer hover:bg-white/5 p-2 rounded-xl transition-colors">
-                        {/* Avatar Placeholder com Gradiente */}
-                        {user.avatar_url ? (
-                            <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-orange-500/10">
-                                <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                            </div>
-                        ) : (
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F24405] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-orange-500/20">
-                                {user.full_name?.[0].toUpperCase() || 'U'}
-                            </div>
-                        )}
-
-                        <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-bold text-white truncate group-hover:text-[#F24405] transition-colors">
-                                {user.full_name}
-                            </p>
-
-                            {/* Link Inteligente: Só Admin vai pro Painel */}
-                            {user.role === 'admin' ? (
-                                <Link href="/painel/settings" className="flex items-center text-xs text-gray-500 hover:text-white transition-colors mt-0.5">
-                                    <Settings className="w-3 h-3 mr-1" />
-                                    Painel Admin
-                                </Link>
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-3 p-2 rounded-xl transition-colors hover:bg-white/5 cursor-pointer">
+                            {/* Avatar */}
+                            {user.avatar_url ? (
+                                <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-orange-500/10 flex-shrink-0">
+                                    <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                </div>
                             ) : (
-                                <Link href="/settings" className="flex items-center text-xs text-gray-500 hover:text-white transition-colors mt-0.5">
-                                    <User className="w-3 h-3 mr-1" />
-                                    Membro
-                                </Link>
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F24405] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-orange-500/20 flex-shrink-0">
+                                    {user.full_name?.[0].toUpperCase() || 'U'}
+                                </div>
                             )}
+
+                            <div className="flex-1 overflow-hidden min-w-0">
+                                <p className="text-sm font-bold text-white truncate hover:text-[#F24405] transition-colors">
+                                    {user.full_name}
+                                </p>
+                                <span className="text-xs text-gray-500 flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                    Online
+                                </span>
+                            </div>
                         </div>
+
+                        {/* Botão Logout */}
+                        <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center justify-center px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 rounded-xl text-xs font-bold transition-all border border-red-500/10 hover:border-red-500/30 group"
+                        >
+                            <LogOut className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                            Sair da Conta
+                        </button>
                     </div>
                 ) : (
                     <Link
