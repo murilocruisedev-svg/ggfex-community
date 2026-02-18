@@ -13,7 +13,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
-  
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-heading: var(--font-poppins), ui-sans-serif, system-ui;
 }
@@ -21,24 +21,27 @@
 :root {
   --background: #0a0a0c;
   --foreground: #ffffff;
-  
+
   --primary: #6366f1;
   --primary-foreground: #ffffff;
-  
+
   --secondary: #18181b;
   --secondary-foreground: #a1a1aa;
-  
+
   --accent: #ec4899;
   --accent-foreground: #ffffff;
-  
+
   --card: #121214;
   --card-foreground: #ffffff;
-  
+
   --sidebar: #0f0f11;
   --sidebar-foreground: #a1a1aa;
 }
 
+html,
 body {
-  background-color: var(--background);
+  background-color: #050505;
   color: var(--foreground);
+  overflow-x: hidden;
+  /* Evita scroll horizontal indesejado */
 }
