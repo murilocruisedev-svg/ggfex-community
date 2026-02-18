@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ArrowRight, Sparkles, Music } from 'lucide-react'
 import { WalkingLoader } from '@/components/ui/WalkingLoader'
+import { cn } from '@/lib/utils'
 
 // Definindo tipos manuais para garantir compatibilidade
 interface SoundEffect {
@@ -142,25 +143,48 @@ export default function HomePage() {
                     </div>
 
                     {/* Filtros Mobile (Scroll Horizontal se precisar) */}
-                    <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                    <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
                         {/* Botão Todos */}
                         <button
                             onClick={() => setSelectedCategoryId(null)}
-                            className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all border ${selectedCategoryId === null ? 'bg-white text-black border-white' : 'bg-[#111] text-gray-400 border-white/10 hover:text-white hover:bg-white/5'}`}
+                            className={cn(
+                                "group relative flex items-center justify-center px-6 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 border flex-shrink-0",
+                                selectedCategoryId === null
+                                    ? "bg-white/5 text-white border-white/5 shadow-inner"
+                                    : "bg-[#0F0F0F] text-gray-400 border-white/5 hover:text-white hover:bg-white/[0.03]"
+                            )}
                         >
-                            Todos
+                            {selectedCategoryId === null && (
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#F24405] rounded-r-full shadow-[0_0_12px_#F24405] animate-in slide-in-from-left-2 duration-300" />
+                            )}
+                            <span className={cn("transition-transform duration-300", selectedCategoryId === null ? "translate-x-1 text-[#F24405]" : "group-hover:translate-x-0.5")}>
+                                Todos
+                            </span>
                         </button>
 
                         {/* Botões de Categoria */}
-                        {categories.map((category) => (
-                            <button
-                                key={category.id}
-                                onClick={() => setSelectedCategoryId(category.id)}
-                                className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all border ${selectedCategoryId === category.id ? 'bg-white text-black border-white' : 'bg-[#111] text-gray-400 border-white/10 hover:text-white hover:bg-white/5'}`}
-                            >
-                                {category.name}
-                            </button>
-                        ))}
+                        {categories.map((category) => {
+                            const isActive = selectedCategoryId === category.id;
+                            return (
+                                <button
+                                    key={category.id}
+                                    onClick={() => setSelectedCategoryId(category.id)}
+                                    className={cn(
+                                        "group relative flex items-center justify-center px-6 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 border flex-shrink-0",
+                                        isActive
+                                            ? "bg-white/5 text-white border-white/5 shadow-inner"
+                                            : "bg-[#0F0F0F] text-gray-400 border-white/5 hover:text-white hover:bg-white/[0.03]"
+                                    )}
+                                >
+                                    {isActive && (
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#F24405] rounded-r-full shadow-[0_0_12px_#F24405] animate-in slide-in-from-left-2 duration-300" />
+                                    )}
+                                    <span className={cn("transition-transform duration-300", isActive ? "translate-x-1 text-[#F24405]" : "group-hover:translate-x-0.5")}>
+                                        {category.name}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
