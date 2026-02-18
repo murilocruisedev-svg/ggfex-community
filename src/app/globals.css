@@ -6,6 +6,18 @@
 
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-instrument), serif;
+
+  --animate-text-shimmer: text-shimmer 3s linear infinite;
+
+  @keyframes text-shimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    100% {
+      background-position: 200% 50%;
+    }
+  }
 }
 
 /* Base Styles */

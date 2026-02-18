@@ -85,10 +85,10 @@ export default function HomePage() {
                             <Sparkles className="h-3 w-3 text-[#FF6130]" />
                             <span className="text-[10px] font-bold text-[#FF6130] tracking-[0.2em] uppercase">Nova Coleção v2.0</span>
                         </div>
-                        <h1 className="text-2xl md:text-5xl text-white font-serif italic tracking-wide leading-tight">
-                            Sons Cinematográficos <br className="hidden md:block" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6130] to-[#FFCEC2] not-italic font-sans font-bold text-xl md:text-4xl block md:inline mt-1 md:mt-0">
-                                Premium & Impactantes
+                        <h1 className="text-2xl md:text-5xl text-white font-serif italic tracking-wide leading-tight drop-shadow-2xl">
+                            Bem-vindo à comunidade dos <br className="hidden md:block" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6130] via-[#FF8F6B] to-[#FFCEC2] not-italic font-sans font-black text-3xl md:text-6xl block md:inline mt-2 uppercase tracking-tight filter drop-shadow-[0_0_15px_rgba(242,68,5,0.3)] animate-text-shimmer bg-[length:200%_auto]">
+                                Editores de Vídeo
                             </span>
                         </h1>
                     </div>
