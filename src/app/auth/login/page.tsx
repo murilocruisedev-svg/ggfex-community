@@ -98,12 +98,16 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false); // Adicionado state para mostrar senha
 
     return (
-        <div className="min-h-screen w-full bg-black relative overflow-hidden flex items-center justify-center p-4">
+        <div className="min-h-screen w-full bg-[#050505] relative overflow-hidden flex items-center justify-center p-4">
 
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
-            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#F24405]/20 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#FF8558]/10 rounded-full blur-[100px] pointer-events-none"></div>
+            {/* Background Effects (CSS Pure - No External Images) */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1a1a1a] via-[#050505] to-[#000000] opacity-80 pointer-events-none"></div>
+
+            {/* Glow Orbs */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#F24405]/10 rounded-full blur-[100px] animate-pulse"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF8558]/5 rounded-full blur-[80px]"></div>
+            </div>
 
             {/* Login Card */}
             <div className="w-full max-w-[480px] bg-[#0A0A0A]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 md:p-10 relative z-10 shadow-2xl shadow-orange-900/20">
