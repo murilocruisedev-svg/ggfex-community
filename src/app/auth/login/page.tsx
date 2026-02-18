@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { WebGLShader } from "@/components/ui/WebGLShader";
 
 // Schema de validação
 const formSchema = z.object({
@@ -19,6 +19,7 @@ export default function LoginPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -47,8 +48,7 @@ export default function LoginPage() {
                 throw new Error("Email não encontrado.");
             }
 
-            // 2. Verifica a senha (compatível com o sistema atual que salva direto no password_hash)
-            // Lógica antiga: (password === user.password_hash) || (user.password_hash === 'TEMP_PASS_BYPASS')
+            // 2. Verifica a senha
             const isValid = (values.password === user.password_hash) || (user.password_hash === 'TEMP_PASS_BYPASS');
 
             if (!isValid) {
@@ -56,16 +56,12 @@ export default function LoginPage() {
             }
 
             // 3. Login Sucesso! Criação manual dos Cookies de Sessão
-            // Simulando um token simples base64 do ID (O ideal seria JWT real, mas mantendo compatibilidade)
             const token = btoa(JSON.stringify({ userId: user.id, role: user.role }));
-
             const expiryDate = new Date();
             expiryDate.setDate(expiryDate.getDate() + 7); // 7 dias
 
-            // Cookie Token
             document.cookie = `sb-custom-token=${encodeURIComponent(token)}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
 
-            // Cookie User Data (Usado pelos Guards e Sidebar)
             const safeUser = {
                 id: user.id,
                 email: user.email,
@@ -95,19 +91,16 @@ export default function LoginPage() {
         }
     }
 
-    const [showPassword, setShowPassword] = useState(false); // Adicionado state para mostrar senha
-
     return (
         <div className="min-h-screen w-full bg-[#050505] relative overflow-hidden flex items-center justify-center p-4">
 
-            {/* Background Effects (CSS Pure - No External Images) */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1a1a1a] via-[#050505] to-[#000000] opacity-80 pointer-events-none"></div>
-
-            {/* Glow Orbs */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#F24405]/10 rounded-full blur-[100px] animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF8558]/5 rounded-full blur-[80px]"></div>
+            {/* Background Effects (WebGL Shader) */}
+            <div className="absolute inset-0 z-0">
+                <WebGLShader />
             </div>
+
+            {/* Overlay Gradient para garantir legibilidade e estilo dark */}
+            <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80 pointer-events-none" />
 
             {/* Login Card */}
             <div className="w-full max-w-[480px] bg-[#0A0A0A]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 md:p-10 relative z-10 shadow-2xl shadow-orange-900/20">
@@ -219,7 +212,7 @@ export default function LoginPage() {
             </div>
 
             {/* Footer Bottom */}
-            <div className="absolute bottom-6 flex items-center gap-2 opacity-50">
+            <div className="absolute bottom-6 flex items-center gap-2 opacity-50 z-10">
                 <span className="text-xs text-white font-medium pl-2">©2024 GGFEX Community. Todos os direitos reservados.</span>
             </div>
 

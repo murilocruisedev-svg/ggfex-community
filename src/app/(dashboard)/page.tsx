@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -6,6 +5,7 @@ import { AudioCard } from '@/components/ui/AudioCard'
 import { supabase } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ArrowRight, Sparkles, Music } from 'lucide-react'
+import { AIVoiceInput } from '@/components/ui/AIVoiceInput'
 
 // Definindo tipo manual para garantir compatibilidade
 interface SoundEffect {
@@ -104,6 +104,24 @@ export default function HomePage() {
                         </Link>
                     </div>
 
+                </div>
+            </section>
+
+            {/* AI Voice Search Integration */}
+            <section className="relative overflow-hidden bg-[#0A0A0A] border border-white/5 rounded-2xl md:rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)] opacity-30 pointer-events-none" />
+
+                <div className="relative z-10 w-full">
+                    <h2 className="text-lg md:text-xl text-white font-bold mb-2">Busca Inteligente por Voz</h2>
+                    <p className="text-xs md:text-sm text-gray-400 mb-6 max-w-md mx-auto">
+                        Não sabe o nome do som? Descreva o que você precisa ou faça o som com a boca (Sério!).
+                    </p>
+
+                    <AIVoiceInput
+                        demoMode={true}
+                        className="scale-90 md:scale-100"
+                        onStop={(duration) => console.log('Voice finished:', duration)}
+                    />
                 </div>
             </section>
 
