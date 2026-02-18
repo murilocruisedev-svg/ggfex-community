@@ -24,14 +24,36 @@ export default function UpdatePasswordPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Verifica se tem sessão (o link de convite loga o usuário)
+    // Monitora a sessão para validar o link
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            if (!data.session) {
-                // Se não tiver sessão, o link expirou ou é inválido
-                setError("Link inválido ou expirado. Peça um novo convite.");
+        const checkSession = async () => {
+            const { data } = await supabase.auth.getSession();
+            if (data.session) {
+                // Sessão válida! O link funcionou.
+                return;
             }
-        });
+
+            // Se não tem sessão, escuta a mudança de estado (o link #access_token processa assincronamente)
+            const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+                    if (session) setError(null); // Link válido
+                }
+            });
+
+            // Se após 3s não tiver sessão, assume inválido
+            setTimeout(async () => {
+                const { data: finalCheck } = await supabase.auth.getSession();
+                if (!finalCheck.session) {
+                    setError("Link inválido ou expirado. Peça um novo convite.");
+                }
+            }, 3000);
+
+            return () => {
+                authListener.subscription.unsubscribe();
+            };
+        };
+
+        checkSession();
     }, []);
 
     const {
