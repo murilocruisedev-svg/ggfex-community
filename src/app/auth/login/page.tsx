@@ -36,40 +36,57 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            // 1. Login com Email e Senha (Supabase Auth Padrão)
+            // TENTATIVA 1: Login Oficial (Supabase Auth)
             const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
                 email: data.email,
                 password: data.password,
             });
 
-            if (authError || !authData.user) {
+            if (!authError && authData.user) {
+                // Sucesso Oficial
+                const { data: userProfile } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', authData.user.id)
+                    .single();
+
+                if (userProfile) {
+                    await createSessionCookies({
+                        ...userProfile,
+                        email: authData.user.email
+                    });
+
+                    if (userProfile.role === 'admin') router.push("/painel");
+                    else router.push("/");
+                    return;
+                }
+            }
+
+            // TENTATIVA 2: Fallback para Admin Legacy (Se o Auth falhar)
+            // Isso permite que o Admin antigo continue entrando mesmo sem estar no Auth
+            console.log("Login Auth falhou, tentando modo legado para Admin...");
+
+            const { data: legacyUser, error: legacyError } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', data.email)
+                .single();
+
+            if (legacyError || !legacyUser) {
                 throw new Error("Email ou senha incorretos.");
             }
 
-            // 2. Busca dados do perfil (Role, Nome, etc)
-            const { data: userProfile, error: profileError } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', authData.user.id)
-                .single();
-
-            if (profileError || !userProfile) {
-                // Fallback se não achar na tabela users (mas logou no Auth)
-                throw new Error("Usuário sem perfil ativo.");
+            // Verifica se é Admin e se a senha bate (comparação simples do legado)
+            if (legacyUser.role === 'admin') {
+                if (legacyUser.password_hash === data.password) {
+                    // SUCESSO LEGADO!
+                    await createSessionCookies(legacyUser);
+                    router.push("/painel");
+                    return;
+                }
             }
 
-            // 3. Cria Cookies da Sessão Customizada (Mantendo compatibilidade)
-            await createSessionCookies({
-                ...userProfile,
-                email: authData.user.email
-            });
-
-            // 4. Redirecionamento Baseado no Cargo
-            if (userProfile.role === 'admin') {
-                router.push("/painel");
-            } else {
-                router.push("/");
-            }
+            throw new Error("Email ou senha incorretos.");
 
         } catch (err: any) {
             console.error("Erro no login:", err);
