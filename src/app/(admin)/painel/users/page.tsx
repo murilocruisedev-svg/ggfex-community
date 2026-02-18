@@ -189,16 +189,29 @@ export default function UsersPage() {
 
         setActionLoading(true);
         try {
-            const { data, error } = await supabase.functions.invoke('admin-actions', {
-                body: {
-                    action: 'create_subscriber',
-                    newEmail: newSubscriber.email,
-                    newName: newSubscriber.name
-                }
+            // Nova Lógica: Usando API Route Local (Não precisa de deploy de Função)
+            const response = await fetch('/api/admin/create-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: newSubscriber.email,
+                    name: newSubscriber.name
+                })
             });
 
-            if (error) throw error;
-            if (data?.error) throw new Error(data.error);
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Se der erro 500, provavelmente falta a chave secreta no .env.local
+                if (data.error && data.error.includes("SUPABASE_SERVICE_ROLE_KEY")) {
+                    throw new Error("Erro de Configuração: Adicione SUPABASE_SERVICE_ROLE_KEY no seu arquivo .env.local!");
+                }
+                throw new Error(data.error || "Erro ao criar usuário via API");
+            }
+
+            if (data.error) throw new Error(data.error);
 
             alert('Assinante criado com sucesso! 🎉\nO usuário já pode fazer login com o email dele (via Código).');
             setShowCreateModal(false);
