@@ -12,16 +12,12 @@ body {
   background-color: #050505;
   color: var(--foreground);
   overflow-x: hidden;
-}
-
-/* --- Scrollbar Customization (Dark Mode) --- */
-/* Firefox */
-* {
+  /* Firefox Scrollbar */
   scrollbar-width: thin;
-  scrollbar-color: #262626 transparent;
+  scrollbar-color: #262626 #050505;
 }
 
-/* Chrome, Edge, Safari */
+/* Chrome, Edge, Safari Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -33,7 +29,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background-color: #262626;
-  border-radius: 20px;
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -41,11 +37,11 @@ body {
 }
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  .no-scrollbar {
+  .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
