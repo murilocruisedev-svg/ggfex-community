@@ -21,26 +21,47 @@ interface SoundEffect {
 export default function HomePage() {
     const [allSounds, setAllSounds] = useState<SoundEffect[]>([])
     const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState<any>(null)
 
-    // 1. Carregar TODOS os sons
     useEffect(() => {
-        async function fetchAllSounds() {
+        async function fetchData() {
             setLoading(true)
             try {
-                // Removemos o .limit() para trazer tudo
+                // 1. Busca Sons
                 const { data, error } = await supabase
                     .from('sound_effects')
                     .select('*')
                     .order('created_at', { ascending: false })
 
-                if (data) setAllSounds(data)
+                if (error) throw error
+                setAllSounds(data || [])
+
+                // 2. Busca Usuário (Auth Oficial ou Cookie Customizado)
+                const { data: { session } } = await supabase.auth.getSession()
+
+                if (session?.user) {
+                    setUser(session.user)
+                } else {
+                    // Fallback para Cookie Customizado (Login Antigo/Híbrido)
+                    const cookieMatch = document.cookie.match(/sb-custom-user=([^;]+)/);
+                    if (cookieMatch) {
+                        try {
+                            const userData = JSON.parse(decodeURIComponent(cookieMatch[1]));
+                            setUser(userData);
+                        } catch (e) {
+                            console.error("Erro ao ler cookie de usuário", e);
+                        }
+                    }
+                }
+
             } catch (error) {
-                console.error("Erro ao carregar sons:", error)
+                console.error('Erro ao buscar dados:', error)
             } finally {
                 setLoading(false)
             }
         }
-        fetchAllSounds()
+
+        fetchData()
     }, [])
 
     return (
@@ -120,7 +141,7 @@ export default function HomePage() {
                 ) : allSounds.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 animate-fade-in pb-20">
                         {allSounds.map((sound) => (
-                            <AudioCard key={sound.id} sound={sound} />
+                            <AudioCard key={sound.id} sound={sound} isLocked={!user} />
                         ))}
                     </div>
                 ) : (
