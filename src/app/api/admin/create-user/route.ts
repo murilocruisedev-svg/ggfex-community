@@ -41,30 +41,62 @@ export async function POST(request: Request) {
                 persistSession: false
             }
         });
-        // 2. Criar ou Obter Usuário (Enviando Convite)
+        // 2. Tentar enviar convite por E-mail (Método Ideal)
         const requestUrl = new URL(request.url);
-        const siteUrl = requestUrl.origin; // Pega a URL exata de onde veio a requisição (https://seu-site.vercel.app)
+        const siteUrl = requestUrl.origin;
         const redirectUrl = `${siteUrl}/auth/update-password`;
 
-        console.log(`Enviando convite para: ${email} (Redirect: ${redirectUrl})`);
+        console.log(`Tentando enviar convite para: ${email}`);
 
-        const { data: authData, error: authError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+        let userId = null;
+        let tempPassword = null;
+
+        // Tenta enviar convite
+        const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
             redirectTo: redirectUrl
         });
 
-        if (authError) {
-            console.error('Erro ao convidar usuário:', authError);
-            return NextResponse.json({ error: authError.message }, { status: 400 });
+        if (!inviteError && inviteData.user) {
+            userId = inviteData.user.id;
+            console.log("Convite enviado com sucesso.");
+        } else {
+            // FALLBACK: Se der erro (ex: Rate Limit), cria com senha temporária
+            console.warn("Erro ao enviar convite (Rate Limit?), criando manualmente:", inviteError);
+
+            tempPassword = "mudar123"; // Senha padrão de emergência
+
+            // Verifica se usuário já existe no Auth
+            const { data: existingUser } = await supabaseAdmin.from('users').select('id').eq('email', email).single();
+
+            if (existingUser) {
+                userId = existingUser.id;
+                // Apenas atualiza senha se necessário (opcional)
+            } else {
+                // Cria do zero
+                const { data: createData, error: createError } = await supabaseAdmin.auth.admin.createUser({
+                    email: email,
+                    password: tempPassword,
+                    email_confirm: true,
+                    user_metadata: { full_name: name }
+                });
+
+                if (createError) {
+                    return NextResponse.json({ error: createError.message }, { status: 400 });
+                }
+                userId = createData.user?.id;
+            }
         }
 
-        const user = authData.user;
+        if (!userId) {
+            return NextResponse.json({ error: "Erro fatal ao criar usuário." }, { status: 500 });
+        }
 
         // 3. Criar/Atualizar na tabela pública 'users'
         const { error: dbError } = await supabaseAdmin
             .from('users')
             .upsert({
-                id: user.id,
-                email: user.email,
+                id: userId,
+                email: email,
                 full_name: name,
                 role: 'member', // Assinante
                 status: 'active',
@@ -75,6 +107,13 @@ export async function POST(request: Request) {
         if (dbError) {
             console.error('Erro ao salvar no banco:', dbError);
             return NextResponse.json({ error: dbError.message }, { status: 400 });
+        }
+
+        if (tempPassword) {
+            return NextResponse.json({
+                success: true,
+                message: `ATENÇÃO: Limite de e-mail atingido. Usuário criado com senha temporária: ${tempPassword}`
+            });
         }
 
         return NextResponse.json({ success: true, message: 'Convite enviado com sucesso!' });
