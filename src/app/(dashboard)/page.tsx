@@ -107,15 +107,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Feature Placeholder / Loader Section */}
-            <section className="relative overflow-hidden bg-[#0A0A0A] border border-white/5 rounded-2xl md:rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center text-center my-6">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)] opacity-30 pointer-events-none" />
-
-                <div className="relative z-10 scale-75 md:scale-100">
-                    <WalkingLoader />
-                </div>
-            </section>
-
             {/* Lista Completa de Sons - Grid Premium (Ajustado Mobile) */}
             <section>
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 pb-4 border-b border-white/5 gap-4 md:gap-0">
@@ -154,12 +145,11 @@ export default function HomePage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center p-12 md:p-32 bg-[#0A0A0A] rounded-3xl border border-white/5 flex flex-col items-center justify-center text-gray-600">
-                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 md:mb-6">
-                            <Music className="w-6 h-6 md:w-8 md:h-8 opacity-40 text-[#FF6130]" />
-                        </div>
-                        <h3 className="text-base md:text-lg font-serif italic text-white mb-2">Sons não encontrados</h3>
-                        <p className="text-xs md:text-sm max-w-xs mx-auto">Nenhum efeito sonoro encontrado no momento.</p>
+                    <div className="flex flex-col items-center justify-center p-12 md:p-32 bg-[#0A0A0A] rounded-3xl border border-white/5">
+                        <WalkingLoader />
+                        <p className="text-xs md:text-sm text-gray-500 mt-6 max-w-xs mx-auto">
+                            Nenhum efeito sonoro encontrado no momento.
+                        </p>
                     </div>
                 )}
             </section>

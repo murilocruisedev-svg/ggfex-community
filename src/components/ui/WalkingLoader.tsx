@@ -3,40 +3,42 @@
 import React from 'react';
 
 export function WalkingLoader() {
-    return (
-        <div className="flex flex-col items-center justify-center gap-4">
-            <div className="loader-container">
-                <div className="loader">
-                    <svg className="head" viewBox="0 0 100 100" width="60" height="60">
-                        <circle cx="50" cy="50" r="40" fill="#ffffff" />
-                        <circle cx="35" cy="40" r="5" fill="#000" />
-                        <circle cx="65" cy="40" r="5" fill="#000" />
-                    </svg>
-                    <svg className="bod" viewBox="0 0 100 100" width="80" height="80">
-                        <rect x="25" y="25" width="50" height="50" rx="15" fill="#ffffff" />
-                    </svg>
-                    <svg className="legr" viewBox="0 0 100 100" width="40" height="60">
-                        <rect x="30" y="0" width="40" height="60" rx="20" fill="#ffffff" />
-                    </svg>
-                    <svg className="legl" viewBox="0 0 100 100" width="40" height="60">
-                        <rect x="30" y="0" width="40" height="60" rx="20" fill="#ffffff" />
-                    </svg>
-                    <div id="gnd"></div>
-                </div>
-            </div>
+  return (
+    <div className="flex flex-col items-center justify-center gap-6">
+      <div className="loader-container">
+        <div className="loader">
+          <svg className="head" viewBox="0 0 100 100" width="60" height="60">
+            <circle cx="50" cy="50" r="40" fill="#ffffff" />
+            <circle cx="35" cy="40" r="5" fill="#000" />
+            <circle cx="65" cy="40" r="5" fill="#000" />
+          </svg>
+          <svg className="bod" viewBox="0 0 100 100" width="80" height="80">
+            <rect x="25" y="25" width="50" height="50" rx="15" fill="#ffffff" />
+          </svg>
+          <svg className="legr" viewBox="0 0 100 100" width="40" height="60">
+            <rect x="30" y="0" width="40" height="60" rx="20" fill="#ffffff" />
+          </svg>
+          <svg className="legl" viewBox="0 0 100 100" width="40" height="60">
+            <rect x="30" y="0" width="40" height="60" rx="20" fill="#ffffff" />
+          </svg>
+          <div id="gnd"></div>
+        </div>
+      </div>
 
-            <p className="text-white/80 font-mono text-sm animate-pulse">
-                Em andamento...
-            </p>
+      <p className="text-white/60 font-mono text-sm animate-pulse tracking-widest uppercase">
+        Em desenvolvimento...
+      </p>
 
-            <style jsx>{`
+      <style jsx>{`
         .loader-container {
           display: flex;
           align-items: center;
           justify-content: center;
           height: 200px;
-          /* overflow: hidden; */ 
+          perspective: 1000px;
         }
+        
+        /* From Uiverse.io by AatreyuShau */ 
         .loader {
           scale: 0.75;
           position: relative;
@@ -64,6 +66,8 @@ export function WalkingLoader() {
           translate: 75px 135px;
           z-index: 10;
           animation: rstep 1s infinite ease-in;
+        }
+        .legr {
           animation-delay: 0.45s;
         }
 
@@ -129,35 +133,34 @@ export function WalkingLoader() {
           top: 180px;
           left: 50%;
           width: 200px;
-          height: 20px;
+          height: 15px; /* Adjusted height for visual balance */
           background: #000;
           border-radius: 50%;
           translate: -140px 0;
           rotate: 10deg;
           z-index: -1;
-          filter: blur(5px) drop-shadow(1px 3px 5px #000000);
+          filter: blur(0.5px) drop-shadow(1px 3px 5px #000000);
           opacity: 0.25;
-          animation: scroll 1s infinite linear; /* Fixed duration to match 1s cycle */
+          animation: scroll 5s infinite linear;
         }
 
         @keyframes scroll {
           0% {
-            transform: translateY(0px) translateX(50px) scaleX(1);
+            transform: translateY(25px) translate(50px);
             opacity: 0;
           }
           33% {
             opacity: 0.25;
-            transform: translateY(0px) translateX(0px) scaleX(1.2);
           }
           66% {
             opacity: 0.25;
           }
-          100% {
-            transform: translateY(0px) translateX(-100px) scaleX(0.5);
+          to {
+            transform: translateY(-50px) translate(-100px);
             opacity: 0;
           }
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }
