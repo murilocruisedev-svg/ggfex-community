@@ -139,9 +139,15 @@ export default function HomePage() {
                         ))}
                     </div>
                 ) : allSounds.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 animate-fade-in pb-20">
-                        {allSounds.map((sound) => (
-                            <AudioCard key={sound.id} sound={sound} isLocked={!user} />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 pb-20">
+                        {allSounds.map((sound, index) => (
+                            <div
+                                key={sound.id}
+                                className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+                                style={{ animationDelay: `${index * 0.05}s` }}
+                            >
+                                <AudioCard sound={sound} isLocked={!user} />
+                            </div>
                         ))}
                     </div>
                 ) : (
