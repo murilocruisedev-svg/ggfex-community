@@ -205,13 +205,10 @@ export default function LoginPage() {
             const { data: sessionData, error } = await supabase.auth.verifyOtp({
                 email,
                 token: data.otp,
-                type: 'magiclink', // Trocado de 'email' para 'magiclink' (padrão para login sem senha)
+                type: 'email', // Reverting to 'email' for 6-digit OTP
             });
 
-            if (error) {
-                console.error("Erro detalhado verifyOtp:", error); // Log do erro real
-                throw error;
-            }
+            if (error) throw error;
             if (!sessionData.user) throw new Error("Erro ao verificar sessão.");
 
             const { data: fullUser } = await supabase.from('users').select('*').eq('email', email).single();
@@ -230,7 +227,8 @@ export default function LoginPage() {
 
         } catch (err: any) {
             console.error(err);
-            setError("Código inválido ou expirado. Tente reenviar.");
+            // Mostrar o erro REAL para debug
+            setError(err.message || "Código inválido ou expirado. Tente reenviar.");
         } finally {
             setIsLoading(false);
         }
