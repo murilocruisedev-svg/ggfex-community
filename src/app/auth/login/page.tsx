@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { WebGLShader } from "@/components/ui/WebGLShader";
 
@@ -22,27 +22,88 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
 
     // State do Fluxo de Login
-    // 'email' = Digitando Email
-    // 'password' = Digitando Senha (Admin)
-    // 'otp' = Digitando Código (Membro)
     const [step, setStep] = useState<'email' | 'password' | 'otp'>('email');
     const [email, setEmail] = useState("");
+
+    // Timer de Reenvio (60s)
+    const [timer, setTimer] = useState(0);
+
+    // Countdown Effect
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (timer > 0) {
+            interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         setValue,
-        watch
+        watch,
+        trigger
     } = useForm({
         resolver: zodResolver(
             step === 'otp'
-                ? z.object({ otp: z.string().min(6, "O código deve ter 6 dígitos") })
+                ? z.object({ otp: z.string().length(6, "O código deve ter 6 dígitos") })
                 : step === 'password'
                     ? z.object({ password: z.string().min(6, "Mínimo 6 caracteres") })
                     : z.object({ email: z.string().email("Email inválido") })
         ),
     });
+
+    // Custom OTP State (6 dígitos)
+    const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
+
+    // Atualiza o valor do form sempre que o OTP mudar
+    useEffect(() => {
+        const otpString = otpValues.join("");
+        setValue("otp", otpString);
+        if (otpString.length === 6) {
+            trigger("otp"); // Valida se preencheu
+        }
+    }, [otpValues, setValue, trigger]);
+
+    // Handle OTP Input Change
+    const handleOtpChange = (element: HTMLInputElement, index: number) => {
+        if (isNaN(Number(element.value))) return false;
+
+        const newOtp = [...otpValues];
+        newOtp[index] = element.value;
+        setOtpValues(newOtp);
+
+        // Auto-focus next input
+        if (element.value && index < 5) {
+            const nextInput = document.getElementById(`otp-${index + 1}`) as HTMLInputElement;
+            nextInput?.focus();
+        }
+    };
+
+    const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === "Backspace" && !otpValues[index] && index > 0) {
+            // Volta para o anterior se apagar vazio
+            const prev = document.getElementById(`otp-${index - 1}`) as HTMLInputElement;
+            prev?.focus();
+        }
+    };
+
+    const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData("text").slice(0, 6);
+        if (!/^\d+$/.test(pastedData)) return; // Só números
+
+        const newOtp = [...otpValues];
+        pastedData.split("").forEach((char, i) => {
+            if (i < 6) newOtp[i] = char;
+        });
+        setOtpValues(newOtp);
+
+        // Foca no último preenchido ou no próximo vazio
+        const nextIndex = Math.min(pastedData.length, 5);
+        document.getElementById(`otp-${nextIndex}`)?.focus();
+    };
 
     // 1. Verificar Email e Decidir Fluxo
     async function handleCheckEmail(data: any) {
@@ -60,18 +121,14 @@ export default function LoginPage() {
                 .single();
 
             if (dbError || !user) {
-                // Se não achar, assume que é membro novo (tenta OTP direto ou erro?)
-                // Melhor assumir OTP para não vazar quem existe
-                console.log("Usuário não encontrado no banco público, tentando OTP genérico.");
+                console.log("Usuário não encontrado, enviando OTP genérico.");
                 await sendOtp(inputEmail);
                 return;
             }
 
             if (user.role === 'admin') {
-                // É Admin: Pede Senha
                 setStep('password');
             } else {
-                // É Membro: Manda Código
                 await sendOtp(inputEmail);
             }
 
@@ -84,21 +141,37 @@ export default function LoginPage() {
 
     // 2. Enviar OTP (Supabase Nativo)
     async function sendOtp(emailToSend: string) {
+        // Reset OTP
+        setOtpValues(["", "", "", "", "", ""]);
+        setValue("otp", "");
+
         const { error } = await supabase.auth.signInWithOtp({
             email: emailToSend,
-            options: {
-                shouldCreateUser: false // Só loga se existir (ou true se quisermos liberar cadastro via login)
-            }
+            options: { shouldCreateUser: false }
         });
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         setStep('otp');
+        setTimer(60); // Iniciar cooldown de 60s
     }
 
-    // 3. Login com Senha (Admin - Lógica Antiga Custom)
+    // Ação de Reenviar (Botão)
+    async function handleResendCode() {
+        if (timer > 0) return;
+        setIsLoading(true);
+        setError(null);
+        try {
+            await sendOtp(email);
+            // sendOtp já reinicia o timer
+        } catch (err: any) {
+            setError("Erro ao reenviar código.");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    // 3. Login com Senha (Admin)
     async function handleLoginPassword(data: any) {
         setIsLoading(true);
         try {
@@ -109,14 +182,11 @@ export default function LoginPage() {
                 .single();
 
             const user = userData as any;
-
             if (dbError || !user) throw new Error("Usuário não encontrado.");
 
             const isValid = (data.password === user.password_hash) || (user.password_hash === 'TEMP_PASS_BYPASS');
-
             if (!isValid) throw new Error("Senha incorreta.");
 
-            // Sucesso Admin
             await createSessionCookies(user);
             router.push("/painel");
 
@@ -130,6 +200,7 @@ export default function LoginPage() {
     // 4. Login com OTP (Membro)
     async function handleLoginOtp(data: any) {
         setIsLoading(true);
+        setError(null);
         try {
             const { data: sessionData, error } = await supabase.auth.verifyOtp({
                 email,
@@ -140,16 +211,12 @@ export default function LoginPage() {
             if (error) throw error;
             if (!sessionData.user) throw new Error("Erro ao verificar sessão.");
 
-            // Buscar dados completos do usuário para cookie customizado
-            // (Para manter compatibilidade com o resto do app)
             const { data: fullUser } = await supabase.from('users').select('*').eq('email', email).single();
 
-            // Se o usuário existe no Auth mas não na tabela users (ex: criado agora), 
-            // usar dados do Auth ou criar fallback
             const userForCookie = fullUser || {
                 id: sessionData.user.id,
                 email: sessionData.user.email,
-                role: 'member', // Default
+                role: 'member',
                 full_name: sessionData.user.user_metadata?.full_name || 'Membro',
                 avatar_url: '',
                 status: 'active'
@@ -160,13 +227,13 @@ export default function LoginPage() {
 
         } catch (err: any) {
             console.error(err);
-            setError("Código inválido ou expirado.");
+            setError("Código inválido ou expirado. Tente reenviar.");
         } finally {
             setIsLoading(false);
         }
     }
 
-    // Helper: Criar Cookies Custom (Mantendo lógica original do projeto)
+    // Helper Cookies
     async function createSessionCookies(user: any) {
         const token = btoa(JSON.stringify({ userId: user.id, role: user.role }));
         const expiryDate = new Date();
@@ -185,7 +252,6 @@ export default function LoginPage() {
         document.cookie = `sb-custom-user=${encodeURIComponent(JSON.stringify(safeUser))}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
     }
 
-    // Submit Geral
     const onFormSubmit = (data: any) => {
         if (step === 'email') handleCheckEmail(data);
         else if (step === 'password') handleLoginPassword(data);
@@ -194,8 +260,6 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen w-full bg-[#050505] relative overflow-hidden flex items-center justify-center p-4">
-
-            {/* Background Effects */}
             <div className="absolute inset-0 z-0"><WebGLShader /></div>
             <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80 pointer-events-none" />
 
@@ -212,18 +276,16 @@ export default function LoginPage() {
                             {step === 'otp' ? 'Código de Acesso' : step === 'password' ? 'Área Administrativa' : 'Bem-vindo(a)!'}
                         </h1>
                         <p className="text-[#888] text-sm md:text-base font-medium">
-                            {step === 'otp'
-                                ? `Enviamos um código para ${email}`
-                                : step === 'password'
-                                    ? 'Digite sua senha de administrador'
+                            {step === 'otp' ? `Enviamos um código para ${email}`
+                                : step === 'password' ? 'Digite sua senha de administrador'
                                     : 'Digite seu e-mail para entrar'}
                         </p>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-
                     <div className="space-y-4">
+
                         {/* Passo 1: Email */}
                         {step === 'email' && (
                             <div className="relative group animate-fade-in">
@@ -237,7 +299,7 @@ export default function LoginPage() {
                                     autoFocus
                                     className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all font-medium"
                                 />
-                                {errors.email && <p className="text-red-400 text-xs pl-2 pt-1">Email inválido</p>}
+                                {errors.email && <p className="text-red-400 text-xs pl-2 pt-1">{errors.email.message as string}</p>}
                             </div>
                         )}
 
@@ -254,38 +316,50 @@ export default function LoginPage() {
                                     autoFocus
                                     className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-12 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all font-medium"
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white transition-colors"
-                                >
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white transition-colors">
                                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
                                 {errors.password && <p className="text-red-400 text-xs pl-2 pt-1">{errors.password.message as string}</p>}
                             </div>
                         )}
 
-                        {/* Passo 2: OTP (Membro) */}
+                        {/* Passo 2: OTP (Membro) - 6 Quadrados */}
                         {step === 'otp' && (
-                            <div className="space-y-4 animate-fade-in">
-                                <div className="relative group">
-                                    <input
-                                        {...register("otp")}
-                                        type="text"
-                                        placeholder="Digite o código (ex: 123456)"
-                                        maxLength={6}
-                                        autoFocus
-                                        className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl text-center text-2xl tracking-[0.5em] text-white placeholder-gray-700 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all font-bold"
-                                    />
-                                    {errors.otp && <p className="text-red-400 text-xs pl-2 pt-1 text-center">Código inválido</p>}
+                            <div className="space-y-6 animate-fade-in">
+                                <div className="flex justify-between gap-2">
+                                    {otpValues.map((digit, idx) => (
+                                        <input
+                                            key={idx}
+                                            id={`otp-${idx}`}
+                                            type="text"
+                                            maxLength={1}
+                                            value={digit}
+                                            onChange={(e) => handleOtpChange(e.target, idx)}
+                                            onKeyDown={(e) => handleOtpKeyDown(e, idx)}
+                                            onPaste={handlePaste}
+                                            className="w-12 h-14 bg-[#111] border border-white/10 rounded-xl text-center text-2xl font-bold text-white focus:outline-none focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] transition-all"
+                                            autoFocus={idx === 0}
+                                        />
+                                    ))}
                                 </div>
-                                <div className="text-center">
+                                {errors.otp && <p className="text-red-400 text-xs text-center font-medium">Por favor, digite os 6 números do código.</p>}
+
+                                {/* Botões separados (Secondary Actions) */}
+                                <div className="flex items-center justify-between pt-2 gap-4">
                                     <button
                                         type="button"
                                         onClick={() => { setStep('email'); setValue('otp', ''); }}
-                                        className="text-xs text-gray-500 hover:text-white underline"
+                                        className="flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-medium transition-colors hover:text-white"
                                     >
-                                        Mudar email / Reenviar
+                                        Mudar E-mail
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={timer > 0 || isLoading}
+                                        onClick={handleResendCode}
+                                        className="flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-[#F24405] text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:border-[#F24405]/50"
+                                    >
+                                        {timer > 0 ? `Aguarde ${timer}s` : "Reenviar Código"}
                                     </button>
                                 </div>
                             </div>
@@ -293,11 +367,11 @@ export default function LoginPage() {
 
                     </div>
 
-                    {/* Botão de Ação */}
+                    {/* Botão de Ação Principal */}
                     <button
                         type="submit"
-                        disabled={isLoading}
-                        className="w-full h-[52px] bg-gradient-to-r from-[#F24405] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={isLoading || (step === 'otp')} // Desabilita 'Entrar' se estiver no OTP, já que o foco é digitar
+                        className={`w-full h-[52px] bg-gradient-to-r from-[#F24405] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed ${step === 'otp' ? 'hidden' : ''}`}
                     >
                         {isLoading ? (
                             <Loader2 className="h-5 w-5 animate-spin" />
@@ -306,17 +380,19 @@ export default function LoginPage() {
                         )}
                     </button>
 
-                    {/* Footer / Voltar */}
-                    {step !== 'email' && (
-                        <div className="text-center pt-2">
-                            <button
-                                type="button"
-                                onClick={() => { setStep('email'); setError(null); }}
-                                className="text-sm text-gray-500 hover:text-white transition-colors"
-                            >
-                                ← Voltar
-                            </button>
-                        </div>
+                    {/* Botão Entrar específico para OTP (opcional, ou auto-submit) */}
+                    {step === 'otp' && (
+                        <button
+                            type="submit"
+                            disabled={isLoading || otpValues.join('').length < 6}
+                            className="w-full h-[52px] bg-gradient-to-r from-[#F24405] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isLoading ? (
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                            ) : (
+                                "Confirmar Código"
+                            )}
+                        </button>
                     )}
 
                     {/* Error Message */}
@@ -329,7 +405,6 @@ export default function LoginPage() {
                 </form>
             </div>
 
-            {/* Footer Bottom */}
             <div className="absolute bottom-6 flex items-center gap-2 opacity-50 z-10">
                 <span className="text-xs text-white font-medium pl-2">©2024 GGFEX Community.</span>
             </div>
