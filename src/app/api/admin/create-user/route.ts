@@ -41,37 +41,43 @@ export async function POST(request: Request) {
                 persistSession: false
             }
         });
+        // 2. Criar ou Obter Usuário (Enviando Convite)
+        const requestUrl = new URL(request.url);
+        const siteUrl = requestUrl.origin; // Pega a URL exata de onde veio a requisição (https://seu-site.vercel.app)
+        const redirectUrl = `${siteUrl}/auth/update-password`;
 
-        // 1. Gera senha temporária (o login será via OTP/Código, então a senha não importa muito)
-        const tempPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+        console.log(`Enviando convite para: ${email} (Redirect: ${redirectUrl})`);
 
-        // 2. Cria usuário no Auth
-        const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-            email: email,
-            password: tempPassword,
-            email_confirm: true,
-            user_metadata: { full_name: name }
+        const { data: authData, error: authError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+            redirectTo: redirectUrl
         });
 
-        if (createError) throw createError;
-        if (!newUser.user) throw new Error("Erro desconhecido ao criar usuário.");
+        if (authError) {
+            console.error('Erro ao convidar usuário:', authError);
+            return NextResponse.json({ error: authError.message }, { status: 400 });
+        }
 
-        // 3. Insere na tabela 'users' pública
+        const user = authData.user;
+
+        // 3. Criar/Atualizar na tabela pública 'users'
         const { error: dbError } = await supabaseAdmin
             .from('users')
             .upsert({
-                id: newUser.user.id,
-                email: email,
+                id: user.id,
+                email: user.email,
                 full_name: name,
                 role: 'member', // Assinante
-                subscription_status: 'active',
-                subscription_expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 100)), // Vitalício (100 anos)
+                status: 'active',
+                plan: 'pro',
                 created_at: new Date().toISOString()
             });
 
-        if (dbError) throw dbError;
+        if (dbError) {
+            console.error('Erro ao salvar no banco:', dbError);
+            return NextResponse.json({ error: dbError.message }, { status: 400 });
+        }
 
-        return NextResponse.json({ success: true, message: 'Assinante criado com sucesso!' });
+        return NextResponse.json({ success: true, message: 'Convite enviado com sucesso!' });
 
     } catch (error: any) {
         console.error('Erro na API Create User:', error);
