@@ -6,7 +6,6 @@
 
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-instrument), serif;
-  /* Se tiver font-heading, adicione aqui */
 }
 
 /* Base Styles */
@@ -20,28 +19,18 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  /* Scrollbar Dark Global */
-  scrollbar-width: thin;
-  scrollbar-color: #262626 #050505;
+
+  /* ESCONDER SCROLLBAR GLOBALMENTE (Firefox) */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* IE/Edge */
 }
 
-/* Chrome/Edge Scrollbar */
+/* ESCONDER SCROLLBAR GLOBALMENTE (Chrome, Safari, Opera, Edge Novo) */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
+  display: none !important;
+  width: 0px;
   background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #262626;
-  border-radius: 99px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #404040;
 }
 
 @layer utilities {
