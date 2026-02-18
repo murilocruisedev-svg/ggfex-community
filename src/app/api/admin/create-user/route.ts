@@ -3,6 +3,23 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
+        // --- SECURITY CHECK ---
+        const cookieHeader = request.headers.get('cookie') || '';
+        const userCookie = cookieHeader.split('; ').find(row => row.startsWith('sb-custom-user='))?.split('=')[1];
+
+        let isAdmin = false;
+        if (userCookie) {
+            try {
+                const userData = JSON.parse(decodeURIComponent(userCookie));
+                if (userData.role === 'admin') isAdmin = true;
+            } catch (e) { }
+        }
+
+        if (!isAdmin) {
+            return NextResponse.json({ error: 'Acesso Negado: Apenas administradores.' }, { status: 401 });
+        }
+        // ---------------------
+
         const body = await request.json();
         const { email, name } = body;
 

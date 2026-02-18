@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Music, Users, Settings, LogOut, ChevronRight, ShieldCheck, FolderOpen } from 'lucide-react';
+import { LayoutDashboard, Music, Users, Settings, LogOut, ChevronRight, ShieldCheck, FolderOpen, Key } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase/client';
 
@@ -14,6 +14,7 @@ const adminNavItems = [
     { name: 'Categorias', href: '/painel/categories', icon: FolderOpen },
     { name: 'Assinantes', href: '/painel/users', icon: Users },
     { name: 'Administradores', href: '/painel/admins', icon: ShieldCheck },
+    { name: 'Chaves de API', href: '/painel/chave', icon: Key },
     { name: 'Configurações', href: '/painel/settings', icon: Settings },
 ];
 
