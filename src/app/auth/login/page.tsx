@@ -33,43 +33,63 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            // Tenta Login via Function Customizada (Para ler do Banco Público)
-            const { data, error } = await supabase.functions.invoke('auth-custom', {
-                body: {
-                    action: 'login',
-                    email: values.email,
-                    password: values.password
-                }
-            })
+            // 1. Busca usuário pelo email diretamente na tabela 'users'
+            const { data: userData, error: dbError } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', values.email)
+                .single();
 
-            if (error || !data || data.error) {
-                console.error("Erro Function:", error || data?.error);
-                throw new Error("Email ou senha incorretos.");
+            const user = userData as any;
+
+            if (dbError || !user) {
+                console.error("Erro DB:", dbError);
+                throw new Error("Email não encontrado.");
             }
 
-            // SALVAR SESSÃO MANUALMENTE (Cookies)
-            if (data.token) {
-                const expiryDate = new Date();
-                expiryDate.setDate(expiryDate.getDate() + 7);
-                document.cookie = `sb-custom-token=${encodeURIComponent(data.token)}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
-                document.cookie = `sb-custom-user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
+            // 2. Verifica a senha (compatível com o sistema atual que salva direto no password_hash)
+            // Lógica antiga: (password === user.password_hash) || (user.password_hash === 'TEMP_PASS_BYPASS')
+            const isValid = (values.password === user.password_hash) || (user.password_hash === 'TEMP_PASS_BYPASS');
+
+            if (!isValid) {
+                throw new Error("Senha incorreta.");
             }
 
-            // Sucesso! REDIRECIONAMENTO INTELIGENTE POR CARGO
+            // 3. Login Sucesso! Criação manual dos Cookies de Sessão
+            // Simulando um token simples base64 do ID (O ideal seria JWT real, mas mantendo compatibilidade)
+            const token = btoa(JSON.stringify({ userId: user.id, role: user.role }));
 
-            const userRole = data?.user?.role || 'member';
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 7); // 7 dias
+
+            // Cookie Token
+            document.cookie = `sb-custom-token=${encodeURIComponent(token)}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
+
+            // Cookie User Data (Usado pelos Guards e Sidebar)
+            const safeUser = {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                full_name: user.full_name,
+                avatar_url: user.avatar_url,
+                status: user.status
+            };
+            document.cookie = `sb-custom-user=${encodeURIComponent(JSON.stringify(safeUser))}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax; Secure`;
+
+            // 4. Redirecionamento
+            const userRole = user.role || 'member';
 
             if (userRole === 'admin') {
-                router.push("/painel"); // Painel ADMIN
+                router.push("/painel");
             } else {
-                router.push("/"); // Comunidade (Membros)
+                router.push("/");
             }
 
             router.refresh();
 
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError("Email ou senha incorretos.");
+            setError(err.message || "Erro ao realizar login.");
         } finally {
             setIsLoading(false);
         }
