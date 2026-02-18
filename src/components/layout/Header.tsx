@@ -79,11 +79,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                     <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#F24405] rounded-full border border-[#050505]"></span>
                 </button>
 
-                <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-[#F24405] to-[#D93D04] p-[1px] cursor-pointer shadow-lg shadow-orange-900/20 hover:scale-105 transition-transform">
-                    <div className="h-full w-full rounded-full bg-[#050505] flex items-center justify-center">
-                        <UserIcon className="h-4 w-4 text-gray-300" />
-                    </div>
-                </div>
+
             </div>
         </header>
     )
