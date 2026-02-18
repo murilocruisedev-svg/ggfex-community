@@ -48,7 +48,7 @@ export default function ConfigurarChavePage() {
 
                 <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4 mb-6 flex gap-3 text-yellow-500 text-sm">
                     <AlertTriangle className="w-5 h-5 flex-shrink-0" />
-                    <p>Essa chave é sensível. Só cole se você for o administrador do projeto. Pegue ela no painel da Supabase -> Settings -> API.</p>
+                    <p>Essa chave é sensível. Só cole se você for o administrador do projeto. Pegue ela no painel da Supabase &rarr; Settings &rarr; API.</p>
                 </div>
 
                 <div className="space-y-4">
