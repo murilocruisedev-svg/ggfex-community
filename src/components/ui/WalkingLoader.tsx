@@ -25,9 +25,7 @@ export function WalkingLoader() {
         <div className="spoke"></div>
       </div>
 
-      <p className="text-white/60 font-mono text-sm tracking-widest uppercase animate-pulse">
-        Em andamento
-      </p>
+
 
       <style jsx>{`
         /* From Uiverse.io by Nawsome */ 
