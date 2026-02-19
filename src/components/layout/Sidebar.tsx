@@ -2,7 +2,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Home, MessageCircle, Music, Zap, Layers, Volume2, Globe, User, Settings, LogOut, Folder } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
@@ -29,6 +29,7 @@ const navItems = [
 
 export function Sidebar() {
     const pathname = usePathname()
+    const searchParams = useSearchParams()
     const [categories, setCategories] = useState<Category[]>([])
     const [user, setUser] = useState<UserProfile | null>(null)
 
@@ -48,7 +49,6 @@ export function Sidebar() {
         // 2. Fetch Current User (Support Custom Cookie Auth)
         async function fetchUser() {
             let currentUser = null;
-            let currentProfile = null;
 
             // Tenta Auth Oficial
             const { data: { user: authUser } } = await supabase.auth.getUser()
@@ -62,7 +62,6 @@ export function Sidebar() {
                     if (cookieMatch) {
                         const userData = JSON.parse(decodeURIComponent(cookieMatch[1]));
                         currentUser = userData;
-                        // O cookie já tem o objeto user
                     }
                 } catch (e) {
                     console.error("Erro ao ler cookie custom:", e);
@@ -77,12 +76,11 @@ export function Sidebar() {
                     .eq('id', currentUser.id)
                     .single();
 
-                // Tenta pegar metadados ou usa email como fallback
                 setUser({
                     email: currentUser.email,
                     full_name: profile?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
                     avatar_url: profile?.avatar_url,
-                    role: profile?.role // Adicionado
+                    role: profile?.role
                 })
             }
         }
@@ -92,26 +90,21 @@ export function Sidebar() {
     }, [])
 
     const handleLogout = async () => {
-        // 1. Supabase SignOut
         await supabase.auth.signOut()
-
-        // 2. Limpar Cookies
         document.cookie = "sb-custom-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
         document.cookie = "sb-custom-user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
-        document.cookie = "sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
-
-        // 3. Redirecionar
         window.location.href = '/auth/login'
     }
 
     return (
         <div className="h-full bg-[#050505] flex flex-col border-r border-white/5 overflow-y-auto">
-            {/* ... (Header e Nav: Inalterado) ... */}
             {/* Header */}
             <div className="p-6">
-                <h1 className="text-xl font-bold tracking-tight text-white font-heading">
-                    GGFEX <span className="text-[#F24405]">Community</span>
-                </h1>
+                <Link href="/" className="inline-block">
+                    <h1 className="text-xl font-bold tracking-tight text-white font-heading cursor-pointer">
+                        GGFEX <span className="text-[#F24405]">Community</span>
+                    </h1>
+                </Link>
             </div>
 
             <nav className="flex-1 px-4 space-y-8">
@@ -121,7 +114,6 @@ export function Sidebar() {
                         {navItems.map((item) => {
                             const Icon = item.icon
                             const isActive = pathname === item.href
-                            const isSoundEffects = item.name === 'Sound Effects'
 
                             return (
                                 <Link
@@ -130,13 +122,8 @@ export function Sidebar() {
                                     className={cn(
                                         "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border",
                                         isActive
-                                            ? "bg-[#F24405] text-white shadow-lg shadow-orange-500/20"
-                                            : "text-gray-400 hover:text-white hover:bg-white/5",
-
-                                        // Force orange border for Sound Effects item
-                                        isSoundEffects
-                                            ? "border-[#F24405]/50 hover:border-[#F24405]"
-                                            : isActive ? "border-transparent" : "border-transparent hover:border-white/5"
+                                            ? "bg-[#F24405] text-white border-[#F24405] shadow-lg shadow-orange-500/20"
+                                            : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent"
                                     )}
                                 >
                                     <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-white" : "text-gray-500 group-hover:text-white")} />
@@ -147,7 +134,7 @@ export function Sidebar() {
                     </div>
                 </div>
 
-                {/* Botão Comunidade (WhatsApp) - Mantendo a mesma lógica */}
+                {/* Botão Comunidade (WhatsApp) */}
                 <div>
                     <Link
                         href="https://whatsapp.com"
@@ -159,7 +146,7 @@ export function Sidebar() {
                     </Link>
                 </div>
 
-                {/* Categorias - Mantendo a mesma lógica */}
+                {/* Categorias */}
                 <div>
                     <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <Layers className="w-3 h-3" />
@@ -172,24 +159,26 @@ export function Sidebar() {
                             </div>
                         ) : (
                             categories.map((category) => {
-                                const isActive = pathname === `/library` && window.location.search.includes(category.slug)
+                                const currentCategory = searchParams.get('category')
+                                const isActive = currentCategory === category.slug
 
                                 return (
                                     <Link
                                         key={category.id}
                                         href={`/library?category=${category.slug}`}
                                         className={cn(
-                                            "flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-all group relative overflow-hidden",
+                                            "flex items-center px-4 py-2.5 text-sm font-medium transition-all group relative overflow-hidden",
+                                            // Efeito de Seleção Lateral Laranja
                                             isActive
-                                                ? "text-[#F24405] bg-[#F24405]/10 border border-[#F24405]/20"
-                                                : "text-gray-400 hover:text-white hover:bg-white/5 border border-transparent"
+                                                ? "border-l-2 border-[#F24405] bg-gradient-to-r from-[#F24405]/10 to-transparent text-[#F24405]"
+                                                : "border-l-2 border-transparent text-gray-400 hover:text-white hover:bg-white/5"
                                         )}
                                     >
                                         <Folder className={cn(
                                             "w-4 h-4 mr-3 transition-colors",
                                             isActive ? "text-[#F24405] fill-[#F24405]/20" : "text-gray-600 group-hover:text-gray-400"
                                         )} />
-                                        <span className="relative z-10">{category.name}</span>
+                                        <span className={cn("relative z-10", isActive && "font-bold")}>{category.name}</span>
                                     </Link>
                                 )
                             })
