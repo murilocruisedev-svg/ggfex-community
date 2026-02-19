@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
         // 1. EXTRAIR DADOS (Compatível com Kiwify e genérico)
         // Kiwify envia "Customer" ou "customer"
-        if (body.img && body.Customer) { // Padrão Kiwify
+        if (body.Customer) { // Padrão Kiwify (Maiúsculo)
             email = body.Customer.email;
             name = body.Customer.full_name || body.Customer.name || name;
         } else if (body.customer) {
