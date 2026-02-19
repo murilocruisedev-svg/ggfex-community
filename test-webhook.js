@@ -1,4 +1,4 @@
-const email = "murilocruisedev@gmail.com";
+const email = "drmurilo0002@gmail.com";
 const url = "https://ggfex-community.vercel.app/api/webhook/kiwify";
 
 async function testWebhook() {
