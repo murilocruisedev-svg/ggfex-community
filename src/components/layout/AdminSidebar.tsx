@@ -102,7 +102,7 @@ export function AdminSidebar() {
                     </div>
                     <div className="flex flex-col justify-center">
                         <h1 className="text-lg font-bold text-white tracking-tight leading-none">
-                            GGFEX <span className="text-[#F24405]">Painel</span>
+                            GFEX <span className="text-[#F24405]">Painel</span>
                         </h1>
                         <p className="text-[10px] text-gray-500 font-medium tracking-widest uppercase mt-1">
                             Gestor v1.0

@@ -16,7 +16,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "GGFEX Community",
+  title: "GFEX Community",
   description: "Premium Sound Effects Platform",
 };
 

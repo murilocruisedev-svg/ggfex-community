@@ -102,7 +102,7 @@ export function Sidebar() {
             <div className="p-6">
                 <Link href="/" className="inline-block">
                     <h1 className="text-xl font-bold tracking-tight text-white font-heading cursor-pointer">
-                        GGFEX <span className="text-[#F24405]">Community</span>
+                        GFEX <span className="text-[#F24405]">Community</span>
                     </h1>
                 </Link>
             </div>

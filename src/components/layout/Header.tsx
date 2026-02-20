@@ -46,7 +46,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                             <Menu className="h-6 w-6" />
                         </button>
                         <span className="font-heading font-bold text-lg text-white">
-                            GGFEX
+                            GFEX
                         </span>
                     </div>
                     <button

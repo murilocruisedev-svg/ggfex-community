@@ -1,5 +1,5 @@
 const email = "drmurilo0002@gmail.com";
-const url = "https://ggfex-community.vercel.app/api/webhook/kiwify";
+const url = "https://gfex-community.vercel.app/api/webhook/kiwify";
 
 async function testWebhook() {
     console.log(`Enviando Webhook de Teste para ${email}...`);

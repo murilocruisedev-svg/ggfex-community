@@ -201,7 +201,7 @@ export default function LoginPage() {
             </div>
 
             <div className="absolute bottom-6 flex items-center gap-2 opacity-50 z-10">
-                <span className="text-xs text-white font-medium pl-2">©2024 GGFEX Community.</span>
+                <span className="text-xs text-white font-medium pl-2">©2024 GFEX Community.</span>
             </div>
         </div>
     );
