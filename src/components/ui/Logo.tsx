@@ -1,20 +1,15 @@
 import { cn } from '@/lib/utils';
 
 export function Logo({ className }: { className?: string }) {
+    const logoUrl = "https://scontent.fcmp1-1.fna.fbcdn.net/v/t39.30808-6/640294972_122108791767229706_913032807331872645_n.jpg?stp=dst-jpg_s640x640_tt6&_nc_cat=109&ccb=1-7&_nc_sid=13d280&_nc_ohc=mxzYQBoAzaMQ7kNvwFtwMMF&_nc_oc=AdlI5rZodmxLtO_37xddaWtqwSSxHf5DpdRxf-u2f_KPru6sv-nB59sv-jdLCU3Ov2H-1hHJhRwxcqHU7kppFqvs&_nc_zt=23&_nc_ht=scontent.fcmp1-1.fna&_nc_gid=3qLArp0AV2ERQPRrS0LzcQ&oh=00_AfvmMX_eUYsC1nr9FHIPwpLfD1gHSR9pICD7l0BnbFvqWA&oe=699FF1BB";
+
     return (
-        <div className={cn("flex flex-col items-center justify-center", className)}>
-            <div className="relative">
-                <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white flex items-baseline">
-                    G<span className="text-white/90">F</span>
-                    <span className="text-white">E</span>
-                    <span className="text-blue-400">X</span>
-                </h1>
-                <div className="flex items-center mt-1 w-full px-1">
-                    <div className="h-[3px] bg-blue-500 flex-1 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mx-2 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
-                    <div className="h-[1px] bg-blue-400/50 flex-1 rounded-full"></div>
-                </div>
-            </div>
+        <div className={cn("flex items-center justify-center", className)}>
+            <img
+                src={logoUrl}
+                alt="GFEX Logo"
+                className="h-full w-auto object-contain"
+            />
         </div>
     );
 }
