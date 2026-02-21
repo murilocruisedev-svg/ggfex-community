@@ -101,9 +101,7 @@ export function Sidebar() {
             {/* Header */}
             <div className="p-6">
                 <Link href="/" className="inline-block">
-                    <h1 className="text-xl font-bold tracking-tight text-white font-heading cursor-pointer">
-                        GFEX <span className="text-[#F24405]">Community</span>
-                    </h1>
+                    <img src="/logo.png" alt="GFEX" className="h-10 w-auto object-contain" />
                 </Link>
             </div>
 

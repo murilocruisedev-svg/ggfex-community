@@ -2,6 +2,7 @@
 
 import { Search, User as UserIcon, Bell, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import Link from 'next/link'
 
 interface HeaderProps {
     onOpenMobileMenu?: () => void;
@@ -45,9 +46,9 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                         >
                             <Menu className="h-6 w-6" />
                         </button>
-                        <span className="font-heading font-bold text-lg text-white">
-                            GFEX
-                        </span>
+                        <Link href="/">
+                            <img src="/logo.png" alt="GFEX" className="h-8 w-auto object-contain" />
+                        </Link>
                     </div>
                     <button
                         onClick={() => setMobileSearchOpen(true)}

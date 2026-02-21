@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const requestUrl = new URL(request.url);
-        const siteUrl = requestUrl.origin; // https://gfex-community.vercel.app
+        const siteUrl = requestUrl.origin; // https://gfexcommunity.vercel.app
 
         console.log('--- WEBHOOK KIWIFY (VERCEL) ---');
         // console.log(JSON.stringify(body, null, 2)); // Descomente para debug

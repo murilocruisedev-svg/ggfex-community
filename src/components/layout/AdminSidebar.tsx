@@ -95,20 +95,9 @@ export function AdminSidebar() {
         <aside className="h-full w-full flex flex-col bg-[#0A0A0A] border-r border-[#222] shadow-[4px_0_24px_rgba(0,0,0,0.4)]">
             {/* Header / Logo Area */}
             <div className="h-24 flex items-center px-8 border-b border-[#1A1A1A]/80 bg-[#0A0A0A]">
-                <div className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80">
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#F24405] to-[#D93D04] flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/30 transition-shadow">
-                        <span className="text-white font-bold text-xl tracking-tighter">G</span>
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="flex flex-col justify-center">
-                        <h1 className="text-lg font-bold text-white tracking-tight leading-none">
-                            GFEX <span className="text-[#F24405]">Painel</span>
-                        </h1>
-                        <p className="text-[10px] text-gray-500 font-medium tracking-widest uppercase mt-1">
-                            Gestor v1.0
-                        </p>
-                    </div>
-                </div>
+                <Link href="/" className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80">
+                    <img src="/logo.png" alt="GFEX Painel" className="h-12 w-auto object-contain" />
+                </Link>
             </div>
 
             {/* Navigation */}

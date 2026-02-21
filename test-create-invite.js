@@ -10,7 +10,7 @@ async function manualInvite() {
     console.log('Tentando convidar murilocruisedev@gmail.com MANUALMENTE...');
 
     const { data, error } = await supabase.auth.admin.inviteUserByEmail('murilocruisedev@gmail.com', {
-        redirectTo: 'https://gfex-community.vercel.app/auth/update-password',
+        redirectTo: 'https://gfexcommunity.vercel.app/auth/update-password',
         data: { full_name: 'Teste Manual Local' }
     });
 

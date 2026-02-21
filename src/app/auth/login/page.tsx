@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { WebGLShader } from "@/components/ui/WebGLShader";
+import { Logo } from "@/components/ui/Logo";
 
 // Schema de validação simples
 const formSchema = z.object({
@@ -127,9 +128,7 @@ export default function LoginPage() {
 
                 {/* Header */}
                 <div className="flex flex-col items-center justify-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#F24405] to-[#D93D04] rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20 mb-4 transform rotate-3 hover:rotate-6 transition-transform duration-500">
-                        <span className="text-3xl font-bold text-white tracking-tighter">G</span>
-                    </div>
+                    <Logo className="h-24 w-auto mb-4" />
                     <div className="text-center">
                         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
                             Bem-vindo(a)
