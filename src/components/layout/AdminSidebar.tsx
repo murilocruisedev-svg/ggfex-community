@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Music, Users, Settings, LogOut, ChevronRight, ShieldCheck, FolderOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase/client';
+import { Logo } from '@/components/ui/Logo';
 
 const adminNavItems = [
     { name: 'Dashboard', href: '/painel', icon: LayoutDashboard },
@@ -96,7 +97,7 @@ export function AdminSidebar() {
             {/* Header / Logo Area */}
             <div className="h-24 flex items-center px-8 border-b border-[#1A1A1A]/80 bg-[#0A0A0A]">
                 <Link href="/" className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80">
-                    <img src="/logo.png" alt="GFEX Painel" className="h-12 w-auto object-contain" />
+                    <Logo className="h-10" />
                 </Link>
             </div>
 

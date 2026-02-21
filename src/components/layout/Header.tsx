@@ -3,6 +3,7 @@
 import { Search, User as UserIcon, Bell, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
+import { Logo } from '@/components/ui/Logo'
 
 interface HeaderProps {
     onOpenMobileMenu?: () => void;
@@ -47,7 +48,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                             <Menu className="h-6 w-6" />
                         </button>
                         <Link href="/">
-                            <img src="/logo.png" alt="GFEX" className="h-8 w-auto object-contain" />
+                            <Logo className="h-6" />
                         </Link>
                     </div>
                     <button

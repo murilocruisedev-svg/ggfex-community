@@ -7,6 +7,7 @@ import { Home, MessageCircle, Music, Zap, Layers, Volume2, Globe, User, Settings
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { Logo } from '@/components/ui/Logo'
 
 // Tipo manual para evitar erro de build
 interface Category {
@@ -101,7 +102,7 @@ export function Sidebar() {
             {/* Header */}
             <div className="p-6">
                 <Link href="/" className="inline-block">
-                    <img src="/logo.png" alt="GFEX" className="h-10 w-auto object-contain" />
+                    <Logo className="h-8" />
                 </Link>
             </div>
 
