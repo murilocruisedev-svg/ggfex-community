@@ -142,19 +142,21 @@ export function Sidebar() {
                 </Link>
             </div>
 
-            {/* Categorias - SCROLLÁVEL com efeito de fade */}
+            {/* Título Categorias - fixo */}
+            <p className="px-6 mt-6 text-xs font-bold text-gray-300 uppercase tracking-widest mb-2 flex items-center gap-2 shrink-0">
+                <Layers className="w-3 h-3" />
+                Categorias
+            </p>
+
+            {/* Lista de Categorias - SCROLLÁVEL com efeito de fade */}
             <div
-                className="flex-1 min-h-0 overflow-y-auto px-4 mt-6"
+                className="flex-1 min-h-0 overflow-y-auto px-4"
                 style={{
-                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)',
-                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)',
+                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 6%, black 90%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 6%, black 90%, transparent 100%)',
                 }}
             >
-                <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2 sticky top-0 bg-[#050505] py-2 z-10">
-                    <Layers className="w-3 h-3" />
-                    Categorias
-                </p>
-                <div className="space-y-1 pb-4">
+                <div className="space-y-1 py-2 pb-4">
                     {categories.length === 0 ? (
                         <div className="px-4 py-2 space-y-2">
                             <div className="h-8 bg-white/5 rounded-lg w-full animate-pulse" />
