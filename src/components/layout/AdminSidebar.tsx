@@ -96,7 +96,7 @@ export function AdminSidebar() {
             {/* Header / Logo Area */}
             <div className="h-24 flex items-center px-8 border-b border-[#1A1A1A]/80 bg-[#0A0A0A]">
                 <Link href="/" className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80">
-                    <Logo className="h-14" />
+                    <Logo className="text-2xl" />
                 </Link>
             </div>
 
