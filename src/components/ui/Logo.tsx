@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 export function Logo({ className }: { className?: string }) {
     return (
         <div className={cn("flex items-center justify-center", className)}>
-            <svg viewBox="0 0 400 160" className="h-full w-auto" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 400 130" className="h-full w-auto" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="xGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#e8ecff" />
@@ -64,14 +64,6 @@ export function Logo({ className }: { className?: string }) {
 
                 {/* Center dot with glow */}
                 <circle cx="200" cy="114" r="5" fill="#3b5bff" filter="url(#dotGlow)" />
-
-                {/* GFEX subtitle below the line */}
-                <text
-                    x="200" y="145"
-                    fontFamily="'Arial', 'Helvetica Neue', sans-serif"
-                    fontWeight="600" fontSize="18" fill="#6b7fff"
-                    textAnchor="middle" letterSpacing="8"
-                >GFEX</text>
             </svg>
         </div>
     );
