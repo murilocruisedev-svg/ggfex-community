@@ -41,13 +41,13 @@ export default function DashboardLayout({
                 {/* Main Content Area */}
                 <div className="flex flex-col min-h-screen md:ml-64 transition-all duration-300">
 
-                    {/* Header Fixo no Topo */}
-                    <div className="fixed top-0 right-0 left-0 md:left-64 z-20 bg-[#050505]/90 backdrop-blur-md border-b border-white/5">
+                    {/* Header Sticky */}
+                    <div className="sticky top-0 z-20 w-full bg-[#050505]/90 backdrop-blur-md border-b border-white/5">
                         <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
                     </div>
 
-                    {/* Conteúdo Real - com padding-top pra compensar o header fixo */}
-                    <main className="flex-1 p-4 md:p-6 w-full pt-20">
+                    {/* Conteúdo */}
+                    <main className="flex-1 p-4 md:p-6 w-full">
                         <div className="max-w-7xl mx-auto w-full pb-20">
                             {children}
                         </div>
