@@ -98,93 +98,88 @@ export function Sidebar() {
     }
 
     return (
-        <div className="h-full bg-[#050505] flex flex-col border-r border-white/5 overflow-y-auto">
+        <div className="h-full bg-[#050505] flex flex-col border-r border-white/5">
             {/* Header */}
-            <div className="p-6">
+            <div className="p-6 shrink-0">
                 <Link href="/" className="inline-block">
                     <Logo className="text-2xl" />
                 </Link>
             </div>
 
-            <nav className="flex-1 px-4 space-y-8">
-                {/* Menu Principal */}
-                <div>
-                    <div className="space-y-1">
-                        {navItems.map((item) => {
-                            const Icon = item.icon
-                            const isActive = pathname === item.href
+            {/* Menu Principal - fixo */}
+            <div className="px-4 space-y-1 shrink-0">
+                {navItems.map((item) => {
+                    const Icon = item.icon
+                    const isActive = pathname === item.href
+
+                    return (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className={cn(
+                                "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border",
+                                isActive
+                                    ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-lg shadow-blue-600/20"
+                                    : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent"
+                            )}
+                        >
+                            <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-white" : "text-gray-500 group-hover:text-white")} />
+                            {item.name}
+                        </Link>
+                    )
+                })}
+            </div>
+
+            {/* Botão Comunidade - fixo */}
+            <div className="px-4 mt-4 shrink-0">
+                <Link
+                    href="https://whatsapp.com"
+                    target="_blank"
+                    className="flex items-center px-4 py-3 text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl hover:bg-green-500/20 transition-all group"
+                >
+                    <MessageCircle className="mr-3 h-5 w-5 text-green-500 group-hover:scale-110 transition-transform" />
+                    Comunidade
+                </Link>
+            </div>
+
+            {/* Categorias - SCROLLÁVEL */}
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 mt-6">
+                <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2 sticky top-0 bg-[#050505] py-2 z-10">
+                    <Layers className="w-3 h-3" />
+                    Categorias
+                </p>
+                <div className="space-y-1 pb-4">
+                    {categories.length === 0 ? (
+                        <div className="px-4 py-2 space-y-2">
+                            <div className="h-8 bg-white/5 rounded-lg w-full animate-pulse" />
+                        </div>
+                    ) : (
+                        categories.map((category) => {
+                            const currentCategory = searchParams.get('category')
+                            const isActive = currentCategory === category.slug
 
                             return (
                                 <Link
-                                    key={item.name}
-                                    href={item.href}
+                                    key={category.id}
+                                    href={`/library?category=${category.slug}`}
                                     className={cn(
-                                        "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border",
+                                        "flex items-center px-4 py-2.5 text-sm font-medium transition-all group relative overflow-hidden",
                                         isActive
-                                            ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-lg shadow-blue-600/20"
-                                            : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent"
+                                            ? "border-l-2 border-[#1F51FF] bg-gradient-to-r from-[#1F51FF]/10 to-transparent text-[#1F51FF]"
+                                            : "border-l-2 border-transparent text-gray-400 hover:text-white hover:bg-white/5"
                                     )}
                                 >
-                                    <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-white" : "text-gray-500 group-hover:text-white")} />
-                                    {item.name}
+                                    <Folder className={cn(
+                                        "w-4 h-4 mr-3 transition-colors",
+                                        isActive ? "text-[#1F51FF] fill-[#1F51FF]/20" : "text-gray-600 group-hover:text-gray-400"
+                                    )} />
+                                    <span className={cn("relative z-10", isActive && "font-bold")}>{category.name}</span>
                                 </Link>
                             )
-                        })}
-                    </div>
+                        })
+                    )}
                 </div>
-
-                {/* Botão Comunidade (WhatsApp) */}
-                <div>
-                    <Link
-                        href="https://whatsapp.com"
-                        target="_blank"
-                        className="flex items-center px-4 py-3 text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 rounded-xl hover:bg-green-500/20 transition-all group"
-                    >
-                        <MessageCircle className="mr-3 h-5 w-5 text-green-500 group-hover:scale-110 transition-transform" />
-                        Comunidade
-                    </Link>
-                </div>
-
-                {/* Categorias */}
-                <div>
-                    <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <Layers className="w-3 h-3" />
-                        Categorias
-                    </p>
-                    <div className="space-y-1">
-                        {categories.length === 0 ? (
-                            <div className="px-4 py-2 space-y-2">
-                                <div className="h-8 bg-white/5 rounded-lg w-full animate-pulse" />
-                            </div>
-                        ) : (
-                            categories.map((category) => {
-                                const currentCategory = searchParams.get('category')
-                                const isActive = currentCategory === category.slug
-
-                                return (
-                                    <Link
-                                        key={category.id}
-                                        href={`/library?category=${category.slug}`}
-                                        className={cn(
-                                            "flex items-center px-4 py-2.5 text-sm font-medium transition-all group relative overflow-hidden",
-                                            // Efeito de Seleção Lateral Laranja
-                                            isActive
-                                                ? "border-l-2 border-[#1F51FF] bg-gradient-to-r from-[#1F51FF]/10 to-transparent text-[#1F51FF]"
-                                                : "border-l-2 border-transparent text-gray-400 hover:text-white hover:bg-white/5"
-                                        )}
-                                    >
-                                        <Folder className={cn(
-                                            "w-4 h-4 mr-3 transition-colors",
-                                            isActive ? "text-[#1F51FF] fill-[#1F51FF]/20" : "text-gray-600 group-hover:text-gray-400"
-                                        )} />
-                                        <span className={cn("relative z-10", isActive && "font-bold")}>{category.name}</span>
-                                    </Link>
-                                )
-                            })
-                        )}
-                    </div>
-                </div>
-            </nav>
+            </div>
 
 
             {/* User Profile Section - Footer */}
