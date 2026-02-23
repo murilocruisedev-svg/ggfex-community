@@ -200,7 +200,7 @@ export function Sidebar() {
                                 <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                             </div>
                         ) : (
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1F51FF] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-blue-600/20 flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1F51FF] to-[#a0b4ff] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-blue-600/20 flex-shrink-0">
                                 {user.full_name?.[0].toUpperCase() || 'U'}
                             </div>
                         )}

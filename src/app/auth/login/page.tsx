@@ -180,7 +180,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-[52px] bg-gradient-to-r from-[#1F51FF] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full h-[52px] bg-gradient-to-r from-[#1F51FF] to-[#4a6cf7] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(31,81,255,0.4)] hover:shadow-[0_0_50px_rgba(31,81,255,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? (
                             <Loader2 className="h-5 w-5 animate-spin" />

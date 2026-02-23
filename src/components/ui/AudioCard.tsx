@@ -92,7 +92,7 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
 
     return (
         <div
-            className="group relative bg-[#131313] border border-white/5 rounded-2xl p-4 md:p-5 transition-all duration-500 hover:bg-[#181818] hover:border-[#1F51FF]/40 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(242,68,5,0.2)] flex flex-col justify-between h-full overflow-hidden active:scale-[0.99] mobile-tap-highlight-none ring-offset-2 ring-offset-[#050505] focus-within:ring-2 focus-within:ring-[#1F51FF]"
+            className="group relative bg-[#131313] border border-white/5 rounded-2xl p-4 md:p-5 transition-all duration-500 hover:bg-[#181818] hover:border-[#1F51FF]/40 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(31,81,255,0.2)] flex flex-col justify-between h-full overflow-hidden active:scale-[0.99] mobile-tap-highlight-none ring-offset-2 ring-offset-[#050505] focus-within:ring-2 focus-within:ring-[#1F51FF]"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -141,7 +141,7 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
             <div
                 className={cn(
                     "relative z-10 h-24 bg-[#080808] rounded-xl mb-5 flex items-center justify-center overflow-hidden border transition-all duration-500 group/player cursor-pointer",
-                    isPlaying ? "border-[#1F51FF]/30 shadow-[inset_0_0_20px_rgba(242,68,5,0.1)]" : "border-white/5 group-hover:border-white/10"
+                    isPlaying ? "border-[#1F51FF]/30 shadow-[inset_0_0_20px_rgba(31,81,255,0.1)]" : "border-white/5 group-hover:border-white/10"
                 )}
                 onClick={togglePlay}
             >
@@ -173,8 +173,8 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
                     className={cn(
                         "relative z-20 h-12 w-12 md:h-14 md:w-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl border",
                         isPlaying
-                            ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-[0_0_30px_rgba(242,68,5,0.4)] scale-110"
-                            : "bg-white/5 backdrop-blur-sm text-white border-white/10 group-hover/player:scale-110 group-hover/player:bg-[#1F51FF] group-hover/player:border-[#1F51FF] group-hover/player:shadow-[0_0_20px_rgba(242,68,5,0.3)]"
+                            ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-[0_0_30px_rgba(31,81,255,0.4)] scale-110"
+                            : "bg-white/5 backdrop-blur-sm text-white border-white/10 group-hover/player:scale-110 group-hover/player:bg-[#1F51FF] group-hover/player:border-[#1F51FF] group-hover/player:shadow-[0_0_20px_rgba(31,81,255,0.3)]"
                     )}
                 >
                     {isPlaying ? (
@@ -208,7 +208,7 @@ export function AudioCard({ sound, isLocked = false }: AudioCardProps) {
                     <button
                         onClick={handleDownload}
                         disabled={isDownloading}
-                        className="group/btn flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-[#1F51FF] hover:text-white text-gray-400 transition-all text-[10px] uppercase font-bold tracking-wide border border-white/5 hover:border-[#1F51FF] hover:shadow-[0_0_15px_rgba(242,68,5,0.3)] active:scale-95 ml-2 disabled:opacity-50 disabled:cursor-wait"
+                        className="group/btn flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-[#1F51FF] hover:text-white text-gray-400 transition-all text-[10px] uppercase font-bold tracking-wide border border-white/5 hover:border-[#1F51FF] hover:shadow-[0_0_15px_rgba(31,81,255,0.3)] active:scale-95 ml-2 disabled:opacity-50 disabled:cursor-wait"
                     >
                         <span className="hidden md:inline">{isDownloading ? 'Baixando...' : 'Download'}</span>
                         {isDownloading ? (

@@ -186,7 +186,7 @@ export default function SettingsPage() {
                 <div className="md:col-span-1">
                     <div className="bg-[#111] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center">
                         <div className="relative group mb-6">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F51FF]/20 shadow-[0_0_30px_-5px_rgba(242,68,5,0.3)] bg-[#050505] flex items-center justify-center">
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F51FF]/20 shadow-[0_0_30px_-5px_rgba(31,81,255,0.3)] bg-[#050505] flex items-center justify-center">
                                 {avatarUrl ? (
                                     <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
