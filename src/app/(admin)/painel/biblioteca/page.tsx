@@ -64,9 +64,13 @@ export default function BibliotecaPage() {
     const [audios, setAudios] = useState<AudioItem[]>([]);
     const [audiosLoading, setAudiosLoading] = useState(false);
 
-    // Rename
+    // Rename (categories)
     const [renamingId, setRenamingId] = useState<number | null>(null);
     const [renameValue, setRenameValue] = useState("");
+
+    // Rename (audios)
+    const [renamingAudioId, setRenamingAudioId] = useState<number | null>(null);
+    const [renameAudioValue, setRenameAudioValue] = useState("");
 
     // Batch upload
     const [uploadQueue, setUploadQueue] = useState<UploadingFile[]>([]);
@@ -207,6 +211,30 @@ export default function BibliotecaPage() {
         setAudios([]);
         setUploadQueue([]);
         fetchCategories(); // refresh counts
+    }
+
+    // ── rename audio ──
+    async function handleRenameAudio(id: number) {
+        const newName = renameAudioValue.trim();
+        if (!newName) {
+            setRenamingAudioId(null);
+            return;
+        }
+
+        try {
+            const { error } = await (supabase.from("sound_effects") as any)
+                .update({ name: newName })
+                .eq("id", id);
+            if (error) throw error;
+
+            setAudios((prev) =>
+                prev.map((a) => (a.id === id ? { ...a, name: newName } : a))
+            );
+        } catch (err: any) {
+            alert("Erro ao renomear áudio: " + err.message);
+        } finally {
+            setRenamingAudioId(null);
+        }
     }
 
     // ── delete audio ──
@@ -415,10 +443,10 @@ export default function BibliotecaPage() {
                                         className="flex items-center gap-3 bg-[#0A0A0A] rounded-lg px-4 py-2.5 border border-white/5"
                                     >
                                         <FileAudio className={`w-4 h-4 shrink-0 ${item.status === "done"
-                                                ? "text-green-500"
-                                                : item.status === "error"
-                                                    ? "text-red-500"
-                                                    : "text-gray-500"
+                                            ? "text-green-500"
+                                            : item.status === "error"
+                                                ? "text-red-500"
+                                                : "text-gray-500"
                                             }`} />
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm truncate">{item.file.name}</p>
@@ -491,9 +519,37 @@ export default function BibliotecaPage() {
                                         <Music className="w-5 h-5" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-medium text-white truncate">
-                                            {audio.name}
-                                        </p>
+                                        {renamingAudioId === audio.id ? (
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={renameAudioValue}
+                                                    onChange={(e) => setRenameAudioValue(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") handleRenameAudio(audio.id);
+                                                        if (e.key === "Escape") setRenamingAudioId(null);
+                                                    }}
+                                                    autoFocus
+                                                    className="flex-1 bg-[#0A0A0A] border border-[#F24405] rounded-lg px-3 py-1.5 text-white text-sm outline-none"
+                                                />
+                                                <button
+                                                    onClick={() => handleRenameAudio(audio.id)}
+                                                    className="p-1.5 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors"
+                                                >
+                                                    <Check className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => setRenamingAudioId(null)}
+                                                    className="p-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <p className="font-medium text-white truncate">
+                                                {audio.name}
+                                            </p>
+                                        )}
                                         <audio
                                             controls
                                             src={audio.file_url}
@@ -502,6 +558,16 @@ export default function BibliotecaPage() {
                                         />
                                     </div>
                                     <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={() => {
+                                                setRenamingAudioId(audio.id);
+                                                setRenameAudioValue(audio.name);
+                                            }}
+                                            className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                                            title="Renomear"
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                        </button>
                                         <a
                                             href={audio.file_url}
                                             target="_blank"
