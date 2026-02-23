@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { AudioCard } from '@/components/ui/AudioCard'
 import { supabase } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { ArrowRight, Sparkles, Music } from 'lucide-react'
+import { ArrowRight, Sparkles, Music, Loader2 } from 'lucide-react'
 import { WalkingLoader } from '@/components/ui/WalkingLoader'
 import { cn } from '@/lib/utils'
 
@@ -24,7 +25,9 @@ interface Category {
     name: string
 }
 
-export default function HomePage() {
+function HomeContent() {
+    const searchParams = useSearchParams()
+    const searchQuery = searchParams.get('q') || ''
     const [allSounds, setAllSounds] = useState<SoundEffect[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -80,9 +83,16 @@ export default function HomePage() {
         fetchData()
     }, [])
 
-    const filteredSounds = selectedCategoryId
-        ? allSounds.filter(s => s.category_id === selectedCategoryId)
-        : allSounds;
+    // Filtrar por categoria e busca
+    const filteredSounds = allSounds.filter(s => {
+        const matchesCategory = selectedCategoryId ? s.category_id === selectedCategoryId : true
+        const matchesSearch = searchQuery
+            ? s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (s.description && s.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (s.tags && s.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+            : true
+        return matchesCategory && matchesSearch
+    });
 
     return (
         <div className="space-y-6 md:space-y-12 pb-12 font-sans bg-[#050505]">
@@ -203,5 +213,13 @@ export default function HomePage() {
                 )}
             </section>
         </div>
+    )
+}
+
+export default function HomePage() {
+    return (
+        <Suspense fallback={<div className="p-12 text-center text-gray-500"><Loader2 className="h-8 w-8 animate-spin mx-auto" /></div>}>
+            <HomeContent />
+        </Suspense>
     )
 }

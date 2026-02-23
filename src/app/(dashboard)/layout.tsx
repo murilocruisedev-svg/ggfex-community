@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { Menu, X } from "lucide-react";
@@ -43,7 +43,9 @@ export default function DashboardLayout({
 
                     {/* Header */}
                     <div className="z-20 w-full bg-[#050505] border-b border-white/5">
-                        <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
+                        <Suspense fallback={<div className="h-16" />}>
+                            <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
+                        </Suspense>
                     </div>
 
                     {/* Conteúdo */}
