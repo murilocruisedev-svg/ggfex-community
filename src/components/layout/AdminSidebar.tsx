@@ -4,15 +4,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Music, Users, Settings, LogOut, ChevronRight, ShieldCheck, FolderOpen } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, ChevronRight, ShieldCheck, FolderOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/Logo';
 
 const adminNavItems = [
     { name: 'Dashboard', href: '/painel', icon: LayoutDashboard },
-    { name: 'Meus Áudios', href: '/painel/audios', icon: Music },
-    { name: 'Categorias', href: '/painel/categories', icon: FolderOpen },
+    { name: 'Biblioteca', href: '/painel/biblioteca', icon: FolderOpen },
     { name: 'Assinantes', href: '/painel/users', icon: Users },
     { name: 'Administradores', href: '/painel/admins', icon: ShieldCheck },
     { name: 'Configurações', href: '/painel/settings', icon: Settings },
