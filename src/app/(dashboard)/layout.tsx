@@ -41,8 +41,8 @@ export default function DashboardLayout({
                 {/* Main Content Area */}
                 <div className="flex flex-col min-h-screen md:ml-64 transition-all duration-300">
 
-                    {/* Header Sticky */}
-                    <div className="sticky top-0 z-20 w-full bg-[#050505]/90 backdrop-blur-md border-b border-white/5">
+                    {/* Header */}
+                    <div className="z-20 w-full bg-[#050505] border-b border-white/5">
                         <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
                     </div>
 
