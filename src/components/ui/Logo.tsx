@@ -7,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
                 src="/logo.png"
                 alt="GFEX Logo"
                 className="h-full w-auto object-contain"
-                style={{ filter: 'invert(1) hue-rotate(180deg)', mixBlendMode: 'screen' }}
+                style={{ filter: 'invert(1) hue-rotate(180deg) brightness(1.4) contrast(1.1)' }}
                 onError={(e) => {
                     e.currentTarget.style.display = 'none';
                 }}
