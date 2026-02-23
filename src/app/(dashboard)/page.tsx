@@ -155,9 +155,9 @@ export default function HomePage() {
                             )}
                         >
                             {selectedCategoryId === null && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#F24405] rounded-r-full shadow-[0_0_12px_#F24405] animate-in slide-in-from-left-2 duration-300" />
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF] animate-in slide-in-from-left-2 duration-300" />
                             )}
-                            <span className={cn("transition-transform duration-300", selectedCategoryId === null ? "translate-x-1 text-[#F24405]" : "group-hover:translate-x-0.5")}>
+                            <span className={cn("transition-transform duration-300", selectedCategoryId === null ? "translate-x-1 text-[#1F51FF]" : "group-hover:translate-x-0.5")}>
                                 Todos
                             </span>
                         </button>
@@ -177,9 +177,9 @@ export default function HomePage() {
                                     )}
                                 >
                                     {isActive && (
-                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#F24405] rounded-r-full shadow-[0_0_12px_#F24405] animate-in slide-in-from-left-2 duration-300" />
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF] animate-in slide-in-from-left-2 duration-300" />
                                     )}
-                                    <span className={cn("transition-transform duration-300", isActive ? "translate-x-1 text-[#F24405]" : "group-hover:translate-x-0.5")}>
+                                    <span className={cn("transition-transform duration-300", isActive ? "translate-x-1 text-[#1F51FF]" : "group-hover:translate-x-0.5")}>
                                         {category.name}
                                     </span>
                                 </button>

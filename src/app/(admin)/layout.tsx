@@ -20,7 +20,7 @@ export default function AdminLayout({
                 <div className="md:hidden fixed top-4 right-4 z-[60]">
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-2 bg-[#F24405] text-white rounded-lg shadow-lg"
+                        className="p-2 bg-[#1F51FF] text-white rounded-lg shadow-lg"
                     >
                         {isMobileMenuOpen ? <X /> : <Menu />}
                     </button>

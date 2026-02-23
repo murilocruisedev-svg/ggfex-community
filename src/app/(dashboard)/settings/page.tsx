@@ -118,7 +118,7 @@ export default function SettingsPage() {
     if (loading) {
         return (
             <div className="flex h-[50vh] items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-[#F24405]" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#1F51FF]" />
             </div>
         )
     }
@@ -134,7 +134,7 @@ export default function SettingsPage() {
                 <div className="md:col-span-1">
                     <div className="bg-[#111] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center space-y-4">
                         <div className="relative group cursor-pointer w-32 h-32" onClick={() => fileInputRef.current?.click()}>
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#111] ring-2 ring-[#F24405]/20 bg-[#050505] flex items-center justify-center relative">
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#111] ring-2 ring-[#1F51FF]/20 bg-[#050505] flex items-center justify-center relative">
                                 {avatarUrl ? (
                                     <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
@@ -159,7 +159,7 @@ export default function SettingsPage() {
                             <h3 className="text-white font-bold text-lg">{fullName || 'Usuário'}</h3>
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="text-xs text-[#F24405] hover:text-[#D93D04] font-bold uppercase tracking-wider mt-2"
+                                className="text-xs text-[#1F51FF] hover:text-[#D93D04] font-bold uppercase tracking-wider mt-2"
                             >
                                 Alterar Foto
                             </button>
@@ -194,7 +194,7 @@ export default function SettingsPage() {
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 placeholder="Seu nome publico"
-                                className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none transition-all focus:ring-1 focus:ring-[#F24405]"
+                                className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none transition-all focus:ring-1 focus:ring-[#1F51FF]"
                             />
                         </div>
 
@@ -204,7 +204,7 @@ export default function SettingsPage() {
                             <button
                                 onClick={handleSaveProfile}
                                 disabled={saving}
-                                className="flex items-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-3 px-8 rounded-xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/20"
+                                className="flex items-center gap-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-3 px-8 rounded-xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-600/20"
                             >
                                 {saving ? (
                                     <>

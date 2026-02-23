@@ -18,7 +18,7 @@ export default function AdminDashboardPage() {
                     <Link href="/" target="_blank" className="flex items-center justify-center gap-2 px-5 py-2.5 border border-white/10 rounded-xl hover:bg-white/5 text-sm font-medium transition-colors text-gray-300 w-full md:w-auto">
                         Ver Site ao Vivo
                     </Link>
-                    <button className="flex items-center justify-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-2.5 px-6 rounded-xl transition-transform hover:scale-105 shadow-lg shadow-orange-500/20 w-full md:w-auto">
+                    <button className="flex items-center justify-center gap-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-2.5 px-6 rounded-xl transition-transform hover:scale-105 shadow-lg shadow-blue-600/20 w-full md:w-auto">
                         <Upload className="w-4 h-4" />
                         Novo Upload
                     </button>
@@ -31,17 +31,17 @@ export default function AdminDashboardPage() {
             {/* 3. Acesso Rápido / Atalhos */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {/* Card de Atalho: Áudios */}
-                <div className="bg-[#111] border border-white/5 rounded-2xl p-8 hover:border-[#F24405]/30 transition-colors group cursor-pointer relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#F24405]/5 rounded-full blur-3xl group-hover:bg-[#F24405]/10 transition-colors -mr-10 -mt-10" />
+                <div className="bg-[#111] border border-white/5 rounded-2xl p-8 hover:border-[#1F51FF]/30 transition-colors group cursor-pointer relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#1F51FF]/5 rounded-full blur-3xl group-hover:bg-[#1F51FF]/10 transition-colors -mr-10 -mt-10" />
 
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#F24405]/10 flex items-center justify-center text-[#F24405]">
+                        <div className="w-12 h-12 rounded-xl bg-[#1F51FF]/10 flex items-center justify-center text-[#1F51FF]">
                             <Music className="w-6 h-6" />
                         </div>
                         <h3 className="text-xl font-bold text-white">Gerenciar Biblioteca</h3>
                     </div>
                     <p className="text-gray-400 mb-6">Adicione, edite ou remova efeitos sonoros da plataforma. Organize por categorias e tags.</p>
-                    <Link href="/painel/audios" className="text-[#F24405] font-medium group-hover:underline flex items-center gap-1">
+                    <Link href="/painel/audios" className="text-[#1F51FF] font-medium group-hover:underline flex items-center gap-1">
                         Acessar Áudios →
                     </Link>
                 </div>

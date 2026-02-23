@@ -197,7 +197,7 @@ export default function AdminsPage() {
                 <div>
                     <h1 className="text-3xl font-bold font-serif italic mb-1 flex items-center gap-2">
                         Gerenciar Administradores
-                        <ShieldCheck className="w-6 h-6 text-[#F24405]" />
+                        <ShieldCheck className="w-6 h-6 text-[#1F51FF]" />
                     </h1>
                     <p className="text-gray-400 text-sm">
                         Total de {users.length} administradores.
@@ -207,7 +207,7 @@ export default function AdminsPage() {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setShowNewAdminModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#F24405] hover:bg-[#D93D04] text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-orange-500/20"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20"
                     >
                         <ShieldCheck className="w-4 h-4" />
                         NOVO ADMIN
@@ -223,7 +223,7 @@ export default function AdminsPage() {
                     placeholder="Buscar admin..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all shadow-input"
+                    className="w-full bg-[#111] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#1F51FF]/50 focus:ring-1 focus:ring-[#1F51FF]/50 transition-all shadow-input"
                 />
             </div>
 
@@ -231,7 +231,7 @@ export default function AdminsPage() {
             <div className="bg-[#111] border border-white/5 rounded-3xl overflow-hidden shadow-2xl pb-4 min-h-[400px]">
                 {loading ? (
                     <div className="p-12 text-center text-gray-500 animate-pulse flex flex-col items-center">
-                        <div className="w-8 h-8 border-2 border-[#F24405] border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <div className="w-8 h-8 border-2 border-[#1F51FF] border-t-transparent rounded-full animate-spin mb-4"></div>
                         Carregando...
                     </div>
                 ) : filteredUsers.length === 0 ? (
@@ -255,7 +255,7 @@ export default function AdminsPage() {
                                     <tr key={user.id} className="group hover:bg-white/[0.02] transition-colors">
                                         <td className="px-6 py-4 font-semibold text-white">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-[#F24405] text-xs font-bold overflow-hidden">
+                                                <div className="w-8 h-8 rounded-full bg-blue-600/10 border border-blue-600/20 flex items-center justify-center text-[#1F51FF] text-xs font-bold overflow-hidden">
                                                     {user.avatar_url ? (
                                                         <img src={user.avatar_url} alt={user.full_name || 'Admin'} className="w-full h-full object-cover" />
                                                     ) : (
@@ -329,7 +329,7 @@ export default function AdminsPage() {
                     <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in zoom-in-95">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                <Lock className="w-5 h-5 text-[#F24405]" /> Alterar Senha
+                                <Lock className="w-5 h-5 text-[#1F51FF]" /> Alterar Senha
                             </h3>
                             <button onClick={() => setShowPasswordModal(null)} className="text-gray-500 hover:text-white">
                                 <X className="w-5 h-5" />
@@ -341,7 +341,7 @@ export default function AdminsPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Nova Senha</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Digite a nova senha..."
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
@@ -350,7 +350,7 @@ export default function AdminsPage() {
                             <button
                                 onClick={handleChangePassword}
                                 disabled={actionLoading || !newPassword}
-                                className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all"
+                                className="w-full py-3 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all"
                             >
                                 {actionLoading ? 'Salvando...' : 'Salvar Nova Senha'}
                             </button>
@@ -365,7 +365,7 @@ export default function AdminsPage() {
                     <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in zoom-in-95">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                <ShieldCheck className="w-5 h-5 text-[#F24405]" /> Novo Administrador
+                                <ShieldCheck className="w-5 h-5 text-[#1F51FF]" /> Novo Administrador
                             </h3>
                             <button onClick={() => setShowNewAdminModal(false)} className="text-gray-500 hover:text-white">
                                 <X className="w-5 h-5" />
@@ -377,7 +377,7 @@ export default function AdminsPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Nome Completo</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Ex: João Silva"
                                     value={newAdminData.name}
                                     onChange={(e) => setNewAdminData({ ...newAdminData, name: e.target.value })}
@@ -387,7 +387,7 @@ export default function AdminsPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Email de Acesso</label>
                                 <input
                                     type="email"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="email@admin.com"
                                     value={newAdminData.email}
                                     onChange={(e) => setNewAdminData({ ...newAdminData, email: e.target.value })}
@@ -397,7 +397,7 @@ export default function AdminsPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Senha Inicial</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Mínimo 6 caracteres"
                                     value={newAdminData.password}
                                     onChange={(e) => setNewAdminData({ ...newAdminData, password: e.target.value })}
@@ -407,7 +407,7 @@ export default function AdminsPage() {
                             <button
                                 onClick={handleCreateAdmin}
                                 disabled={actionLoading || !newAdminData.email || !newAdminData.password}
-                                className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-3 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                             >
                                 {actionLoading ? 'Criando...' : (
                                     <>

@@ -145,14 +145,14 @@ export default function LoginPage() {
                         {/* Campo Email */}
                         <div className="relative group animate-fade-in">
                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Mail className="h-5 w-5 text-gray-500 group-focus-within:text-[#F24405] transition-colors" />
+                                <Mail className="h-5 w-5 text-gray-500 group-focus-within:text-[#1F51FF] transition-colors" />
                             </div>
                             <input
                                 {...register("email")}
                                 type="email"
                                 placeholder="Seu e-mail"
                                 autoFocus
-                                className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all font-medium"
+                                className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#1F51FF]/50 focus:ring-1 focus:ring-[#1F51FF]/50 transition-all font-medium"
                             />
                             {errors.email && <p className="text-red-400 text-xs pl-2 pt-1">{errors.email.message as string}</p>}
                         </div>
@@ -160,13 +160,13 @@ export default function LoginPage() {
                         {/* Campo Senha */}
                         <div className="relative group animate-fade-in">
                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Lock className="h-5 w-5 text-gray-500 group-focus-within:text-[#F24405] transition-colors" />
+                                <Lock className="h-5 w-5 text-gray-500 group-focus-within:text-[#1F51FF] transition-colors" />
                             </div>
                             <input
                                 {...register("password")}
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Sua senha"
-                                className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-12 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all font-medium"
+                                className="w-full h-[56px] bg-[#111] border border-white/5 rounded-xl pl-12 pr-12 text-white placeholder-gray-600 focus:outline-none focus:border-[#1F51FF]/50 focus:ring-1 focus:ring-[#1F51FF]/50 transition-all font-medium"
                             />
                             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white transition-colors">
                                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -180,7 +180,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-[52px] bg-gradient-to-r from-[#F24405] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full h-[52px] bg-gradient-to-r from-[#1F51FF] to-[#FF8558] hover:opacity-90 rounded-full font-bold text-white text-base shadow-[0_0_30px_rgba(242,68,5,0.4)] hover:shadow-[0_0_50px_rgba(242,68,5,0.6)] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? (
                             <Loader2 className="h-5 w-5 animate-spin" />

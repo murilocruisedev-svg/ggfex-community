@@ -98,7 +98,7 @@ export default function CategoriesPage() {
     return (
         <div className="p-8 text-white min-h-screen space-y-8">
             <h1 className="text-3xl font-bold font-serif italic mb-1 flex items-center gap-3">
-                <Tag className="text-[#F24405] w-8 h-8" />
+                <Tag className="text-[#1F51FF] w-8 h-8" />
                 Gerenciar Categorias
             </h1>
 
@@ -112,13 +112,13 @@ export default function CategoriesPage() {
                             value={newCategory}
                             onChange={(e) => setNewCategory(e.target.value)}
                             placeholder="Ex: Cinematic, Terror, Transições..."
-                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all placeholder:text-gray-700"
+                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all placeholder:text-gray-700"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={creating || !newCategory.trim()}
-                        className="bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-orange-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                         {creating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
                         Adicionar

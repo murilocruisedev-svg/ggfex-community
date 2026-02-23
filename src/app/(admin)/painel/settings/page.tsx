@@ -171,13 +171,13 @@ export default function SettingsPage() {
     };
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center text-[#F24405]"><Loader2 className="animate-spin w-10 h-10" /></div>;
+        return <div className="min-h-screen flex items-center justify-center text-[#1F51FF]"><Loader2 className="animate-spin w-10 h-10" /></div>;
     }
 
     return (
         <div className="p-8 max-w-4xl mx-auto text-white">
             <h1 className="text-3xl font-bold font-serif italic mb-8 flex items-center gap-3">
-                <Settings className="w-8 h-8 text-[#F24405]" />
+                <Settings className="w-8 h-8 text-[#1F51FF]" />
                 Meu Perfil
             </h1>
 
@@ -186,7 +186,7 @@ export default function SettingsPage() {
                 <div className="md:col-span-1">
                     <div className="bg-[#111] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center">
                         <div className="relative group mb-6">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#F24405]/20 shadow-[0_0_30px_-5px_rgba(242,68,5,0.3)] bg-[#050505] flex items-center justify-center">
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F51FF]/20 shadow-[0_0_30px_-5px_rgba(242,68,5,0.3)] bg-[#050505] flex items-center justify-center">
                                 {avatarUrl ? (
                                     <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
@@ -215,7 +215,7 @@ export default function SettingsPage() {
                         <h2 className="text-lg font-bold text-white">{fullName || 'Usuário'}</h2>
                         <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
 
-                        {uploading && <p className="text-xs text-[#F24405] mt-4 animate-pulse">Enviando foto...</p>}
+                        {uploading && <p className="text-xs text-[#1F51FF] mt-4 animate-pulse">Enviando foto...</p>}
                     </div>
                 </div>
 
@@ -223,7 +223,7 @@ export default function SettingsPage() {
                 <div className="md:col-span-2">
                     <div className="bg-[#111] border border-white/5 rounded-2xl p-8 space-y-6">
                         <div className="flex items-center gap-2 mb-2 pb-4 border-b border-white/5">
-                            <User className="w-5 h-5 text-[#F24405]" />
+                            <User className="w-5 h-5 text-[#1F51FF]" />
                             <h3 className="text-lg font-bold">Informações Pessoais</h3>
                         </div>
 
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                                     type="text"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] transition-all"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] transition-all"
                                     placeholder="Como você quer ser chamado?"
                                 />
                             </div>
@@ -255,7 +255,7 @@ export default function SettingsPage() {
                             <button
                                 onClick={handleUpdateProfile}
                                 disabled={saving}
-                                className="flex items-center px-6 py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl transition-all shadow-lg shadow-orange-500/20 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                                className="flex items-center px-6 py-3 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
                             >
                                 {saving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-5 h-5 mr-2" />}
                                 {saving ? "Salvando..." : "Salvar Alterações"}

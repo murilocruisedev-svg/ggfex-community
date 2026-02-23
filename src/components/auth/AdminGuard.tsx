@@ -63,7 +63,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     if (isAuthorized === null) {
         return (
             <div className="h-screen w-full flex items-center justify-center bg-black text-white">
-                <Loader2 className="w-10 h-10 animate-spin text-[#F24405]" />
+                <Loader2 className="w-10 h-10 animate-spin text-[#1F51FF]" />
                 <span className="ml-3 font-bold">Verificando Permissões...</span>
             </div>
         );

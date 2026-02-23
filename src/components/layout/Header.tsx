@@ -20,12 +20,12 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
             {mobileSearchOpen ? (
                 <div className="flex items-center w-full gap-2 animate-fade-in md:hidden">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#F24405]" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1F51FF]" />
                         <input
                             type="text"
                             placeholder="O que você procura?"
                             autoFocus
-                            className="w-full bg-[#111] border border-[#F24405]/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#F24405]"
+                            className="w-full bg-[#111] border border-[#1F51FF]/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#1F51FF]"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -53,7 +53,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                     </div>
                     <button
                         onClick={() => setMobileSearchOpen(true)}
-                        className="p-2 text-gray-400 hover:text-[#F24405] active:scale-95 transition-colors"
+                        className="p-2 text-gray-400 hover:text-[#1F51FF] active:scale-95 transition-colors"
                     >
                         <Search className="h-5 w-5" />
                     </button>
@@ -63,11 +63,11 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
             {/* DESKTOP (Inalterado) */}
             <div className="hidden md:flex flex-1 max-w-xl w-full">
                 <div className="relative group w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-[#F24405] transition-colors" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-[#1F51FF] transition-colors" />
                     <input
                         type="text"
                         placeholder="Buscar efeitos sonoros..."
-                        className="w-full bg-[#111] border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all shadow-inner"
+                        className="w-full bg-[#111] border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#1F51FF]/50 focus:ring-1 focus:ring-[#1F51FF]/50 transition-all shadow-inner"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -78,7 +78,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
             <div className="hidden md:flex items-center space-x-4 pl-4">
                 <button className="p-2 text-gray-400 hover:text-white transition-colors relative hover:bg-white/5 rounded-full">
                     <Bell className="h-5 w-5" />
-                    <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#F24405] rounded-full border border-[#050505]"></span>
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#1F51FF] rounded-full border border-[#050505]"></span>
                 </button>
 
 

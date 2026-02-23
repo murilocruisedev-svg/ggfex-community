@@ -37,8 +37,8 @@ export default function ConfigurarChavePage() {
         <div className="p-8 min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
             <div className="max-w-xl w-full bg-[#111] border border-white/10 rounded-3xl p-8 shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center">
-                        <ShieldCheck className="w-6 h-6 text-orange-500" />
+                    <div className="w-12 h-12 bg-blue-600/10 rounded-2xl flex items-center justify-center">
+                        <ShieldCheck className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold">Configurar Chave Secreta</h1>
@@ -54,7 +54,7 @@ export default function ConfigurarChavePage() {
                 <div className="space-y-4">
                     <label className="block text-sm font-bold text-gray-300">Cole a Chave SERVICE_ROLE (começa com 'ey...')</label>
                     <textarea
-                        className="w-full h-32 bg-[#050505] border border-white/10 rounded-xl p-4 text-white font-mono text-xs focus:border-orange-500 outline-none resize-none"
+                        className="w-full h-32 bg-[#050505] border border-white/10 rounded-xl p-4 text-white font-mono text-xs focus:border-blue-600 outline-none resize-none"
                         placeholder="eyJh..."
                         value={key}
                         onChange={(e) => setKey(e.target.value)}
@@ -63,7 +63,7 @@ export default function ConfigurarChavePage() {
                     <button
                         onClick={handleSave}
                         disabled={loading || !key}
-                        className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="w-full py-4 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                         {loading ? 'Salvando...' : 'Salvar Chave e Configurar'}
                     </button>

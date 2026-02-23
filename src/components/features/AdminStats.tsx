@@ -57,7 +57,7 @@ export default function AdminStats() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Usuários Totais */}
-            <div className="bg-[#111] border border-white/5 p-6 rounded-xl relative overflow-hidden group hover:border-[#F24405]/50 transition-colors">
+            <div className="bg-[#111] border border-white/5 p-6 rounded-xl relative overflow-hidden group hover:border-[#1F51FF]/50 transition-colors">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

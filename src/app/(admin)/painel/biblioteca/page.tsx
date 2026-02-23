@@ -361,7 +361,7 @@ export default function BibliotecaPage() {
                             Biblioteca
                         </p>
                         <h1 className="text-2xl font-bold flex items-center gap-3">
-                            <FolderOpen className="w-7 h-7 text-[#F24405]" />
+                            <FolderOpen className="w-7 h-7 text-[#1F51FF]" />
                             {selectedCategory.name}
                         </h1>
                     </div>
@@ -370,14 +370,14 @@ export default function BibliotecaPage() {
                 {/* Upload Zone */}
                 <div className="bg-[#111] border border-white/5 rounded-2xl p-6 space-y-4">
                     <h2 className="text-lg font-bold flex items-center gap-2">
-                        <Upload className="w-5 h-5 text-[#F24405]" />
+                        <Upload className="w-5 h-5 text-[#1F51FF]" />
                         Upload de Áudios
                     </h2>
 
                     {/* Drop area */}
                     <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="relative border-2 border-dashed border-white/10 hover:border-[#F24405]/50 rounded-xl p-8 text-center cursor-pointer transition-all bg-[#0A0A0A] hover:bg-[#F24405]/5 group"
+                        className="relative border-2 border-dashed border-white/10 hover:border-[#1F51FF]/50 rounded-xl p-8 text-center cursor-pointer transition-all bg-[#0A0A0A] hover:bg-[#1F51FF]/5 group"
                     >
                         <input
                             ref={fileInputRef}
@@ -388,8 +388,8 @@ export default function BibliotecaPage() {
                             className="hidden"
                         />
                         <div className="flex flex-col items-center gap-3 text-gray-500 group-hover:text-white transition-colors">
-                            <div className="w-14 h-14 rounded-full bg-white/5 group-hover:bg-[#F24405]/20 flex items-center justify-center transition-colors">
-                                <Upload className="w-7 h-7 opacity-50 group-hover:opacity-100 group-hover:text-[#F24405]" />
+                            <div className="w-14 h-14 rounded-full bg-white/5 group-hover:bg-[#1F51FF]/20 flex items-center justify-center transition-colors">
+                                <Upload className="w-7 h-7 opacity-50 group-hover:opacity-100 group-hover:text-[#1F51FF]" />
                             </div>
                             <span className="font-medium">
                                 Clique para selecionar ou arraste os arquivos
@@ -419,7 +419,7 @@ export default function BibliotecaPage() {
                                     <button
                                         onClick={startBatchUpload}
                                         disabled={isUploading}
-                                        className="bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-2 px-5 rounded-lg shadow-lg shadow-orange-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                                        className="bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-2 px-5 rounded-lg shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
                                     >
                                         {isUploading ? (
                                             <>
@@ -453,7 +453,7 @@ export default function BibliotecaPage() {
                                             {item.status === "uploading" && (
                                                 <div className="w-full bg-white/5 rounded-full h-1 mt-1">
                                                     <div
-                                                        className="bg-[#F24405] h-1 rounded-full transition-all"
+                                                        className="bg-[#1F51FF] h-1 rounded-full transition-all"
                                                         style={{ width: `${item.progress}%` }}
                                                     />
                                                 </div>
@@ -475,7 +475,7 @@ export default function BibliotecaPage() {
                                                 <X className="w-4 h-4" />
                                             </button>
                                         ) : (
-                                            <Loader2 className="w-4 h-4 animate-spin text-[#F24405] shrink-0" />
+                                            <Loader2 className="w-4 h-4 animate-spin text-[#1F51FF] shrink-0" />
                                         )}
                                     </div>
                                 ))}
@@ -488,7 +488,7 @@ export default function BibliotecaPage() {
                 <div className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden">
                     <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                         <h2 className="font-bold text-lg flex items-center gap-2">
-                            <Music className="w-5 h-5 text-[#F24405]" />
+                            <Music className="w-5 h-5 text-[#1F51FF]" />
                             Áudios nesta pasta
                             <span className="text-sm font-normal text-gray-500 ml-1">
                                 ({audios.length})
@@ -515,7 +515,7 @@ export default function BibliotecaPage() {
                                     key={audio.id}
                                     className="flex items-center gap-4 px-6 py-4 hover:bg-white/[0.02] transition-colors group"
                                 >
-                                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[#F24405] group-hover:bg-[#F24405] group-hover:text-white transition-colors shrink-0">
+                                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[#1F51FF] group-hover:bg-[#1F51FF] group-hover:text-white transition-colors shrink-0">
                                         <Music className="w-5 h-5" />
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -530,7 +530,7 @@ export default function BibliotecaPage() {
                                                         if (e.key === "Escape") setRenamingAudioId(null);
                                                     }}
                                                     autoFocus
-                                                    className="flex-1 bg-[#0A0A0A] border border-[#F24405] rounded-lg px-3 py-1.5 text-white text-sm outline-none"
+                                                    className="flex-1 bg-[#0A0A0A] border border-[#1F51FF] rounded-lg px-3 py-1.5 text-white text-sm outline-none"
                                                 />
                                                 <button
                                                     onClick={() => handleRenameAudio(audio.id)}
@@ -601,7 +601,7 @@ export default function BibliotecaPage() {
         <div className="p-8 text-white min-h-screen space-y-8">
             <div>
                 <h1 className="text-3xl font-bold flex items-center gap-3">
-                    <FolderOpen className="text-[#F24405] w-8 h-8" />
+                    <FolderOpen className="text-[#1F51FF] w-8 h-8" />
                     Biblioteca
                 </h1>
                 <p className="text-gray-400 mt-1">
@@ -621,13 +621,13 @@ export default function BibliotecaPage() {
                             value={newCategoryName}
                             onChange={(e) => setNewCategoryName(e.target.value)}
                             placeholder="Ex: Cinematic, Terror, Transições..."
-                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all placeholder:text-gray-700"
+                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all placeholder:text-gray-700"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={creating || !newCategoryName.trim()}
-                        className="bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-orange-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                         {creating ? (
                             <Loader2 className="w-5 h-5 animate-spin" />
@@ -657,7 +657,7 @@ export default function BibliotecaPage() {
                     {categories.map((cat) => (
                         <div
                             key={cat.id}
-                            className="bg-[#111] border border-white/5 rounded-xl p-5 group hover:border-[#F24405]/30 transition-all relative"
+                            className="bg-[#111] border border-white/5 rounded-xl p-5 group hover:border-[#1F51FF]/30 transition-all relative"
                         >
                             {/* Rename overlay */}
                             {renamingId === cat.id ? (
@@ -671,7 +671,7 @@ export default function BibliotecaPage() {
                                             if (e.key === "Escape") setRenamingId(null);
                                         }}
                                         autoFocus
-                                        className="flex-1 bg-[#0A0A0A] border border-[#F24405] rounded-lg px-3 py-2 text-white text-sm outline-none"
+                                        className="flex-1 bg-[#0A0A0A] border border-[#1F51FF] rounded-lg px-3 py-2 text-white text-sm outline-none"
                                     />
                                     <button
                                         onClick={() => handleRename(cat.id)}
@@ -693,11 +693,11 @@ export default function BibliotecaPage() {
                                         onClick={() => openCategory(cat)}
                                         className="cursor-pointer flex items-center gap-4"
                                     >
-                                        <div className="w-12 h-12 rounded-xl bg-[#F24405]/10 flex items-center justify-center text-[#F24405] group-hover:bg-[#F24405] group-hover:text-white transition-colors shrink-0">
+                                        <div className="w-12 h-12 rounded-xl bg-[#1F51FF]/10 flex items-center justify-center text-[#1F51FF] group-hover:bg-[#1F51FF] group-hover:text-white transition-colors shrink-0">
                                             <Folder className="w-6 h-6" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="font-bold text-white truncate group-hover:text-[#F24405] transition-colors">
+                                            <p className="font-bold text-white truncate group-hover:text-[#1F51FF] transition-colors">
                                                 {cat.name}
                                             </p>
                                             <p className="text-xs text-gray-500">

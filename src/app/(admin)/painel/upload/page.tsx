@@ -92,7 +92,7 @@ export default function UploadPage() {
     return (
         <div className="max-w-4xl mx-auto py-8 text-white min-h-screen">
             <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
-                <Upload className="text-[#F24405] w-8 h-8" />
+                <Upload className="text-[#1F51FF] w-8 h-8" />
                 Novo Upload de Áudio
             </h1>
 
@@ -106,7 +106,7 @@ export default function UploadPage() {
                         Arquivo de Áudio (.mp3, .wav)
                     </label>
 
-                    <div className="relative group border-2 border-dashed border-white/10 hover:border-[#F24405]/50 rounded-2xl p-12 text-center transition-all bg-[#0A0A0A] hover:bg-[#F24405]/5 cursor-pointer">
+                    <div className="relative group border-2 border-dashed border-white/10 hover:border-[#1F51FF]/50 rounded-2xl p-12 text-center transition-all bg-[#0A0A0A] hover:bg-[#1F51FF]/5 cursor-pointer">
                         <input
                             type="file"
                             accept="audio/*"
@@ -138,8 +138,8 @@ export default function UploadPage() {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center gap-4 text-gray-500 group-hover:text-white transition-colors">
-                                <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-[#F24405]/20 flex items-center justify-center transition-colors">
-                                    <Upload className="w-8 h-8 opacity-50 group-hover:opacity-100 group-hover:text-[#F24405]" />
+                                <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-[#1F51FF]/20 flex items-center justify-center transition-colors">
+                                    <Upload className="w-8 h-8 opacity-50 group-hover:opacity-100 group-hover:text-[#1F51FF]" />
                                 </div>
                                 <div className="space-y-1">
                                     <span className="block font-medium">Clique para selecionar ou arraste o arquivo</span>
@@ -160,7 +160,7 @@ export default function UploadPage() {
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             placeholder="Ex: Impacto Cinematico Boom"
-                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all placeholder:text-gray-700"
+                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all placeholder:text-gray-700"
                             required
                         />
                     </div>
@@ -174,7 +174,7 @@ export default function UploadPage() {
                             <select
                                 value={formData.category_id}
                                 onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                                className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all appearance-none cursor-pointer"
+                                className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all appearance-none cursor-pointer"
                                 required
                             >
                                 <option value="" disabled>Selecione uma categoria...</option>
@@ -196,7 +196,7 @@ export default function UploadPage() {
                             value={formData.tags}
                             onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                             placeholder="Ex: cinematico, transição, impacto, grave"
-                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all placeholder:text-gray-700"
+                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all placeholder:text-gray-700"
                         />
                     </div>
 
@@ -208,7 +208,7 @@ export default function UploadPage() {
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             placeholder="Detalhes técnicos ou criativos sobre o som..."
                             rows={3}
-                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#F24405] focus:ring-1 focus:ring-[#F24405] outline-none transition-all placeholder:text-gray-700 resize-none"
+                            className="w-full bg-[#0A0A0A] border border-white/10 rounded-lg p-3 text-white focus:border-[#1F51FF] focus:ring-1 focus:ring-[#1F51FF] outline-none transition-all placeholder:text-gray-700 resize-none"
                         />
                     </div>
                 </div>
@@ -219,7 +219,7 @@ export default function UploadPage() {
                         type="submit"
                         disabled={uploading}
                         className={`
-                flex items-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-500/20 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                flex items-center gap-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
                 ${uploading ? "animate-pulse cursor-wait" : ""}
             `}
                     >

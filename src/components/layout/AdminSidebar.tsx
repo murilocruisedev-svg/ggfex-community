@@ -123,13 +123,13 @@ export function AdminSidebar() {
                             )}
                         >
                             {isActive && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-[#F24405] rounded-r-full shadow-[0_0_12px_#F24405]" />
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF]" />
                             )}
 
                             <Icon
                                 className={cn(
                                     "mr-3 h-5 w-5 transition-transform duration-300 group-hover:scale-110",
-                                    isActive ? "text-[#F24405]" : "text-gray-500 group-hover:text-gray-300"
+                                    isActive ? "text-[#1F51FF]" : "text-gray-500 group-hover:text-gray-300"
                                 )}
                                 strokeWidth={isActive ? 2.5 : 2}
                             />
@@ -137,7 +137,7 @@ export function AdminSidebar() {
                             <span className="flex-1">{item.name}</span>
 
                             {isActive && (
-                                <ChevronRight className="w-4 h-4 text-[#F24405] opacity-100 transition-opacity" />
+                                <ChevronRight className="w-4 h-4 text-[#1F51FF] opacity-100 transition-opacity" />
                             )}
                         </Link>
                     );
@@ -158,7 +158,7 @@ export function AdminSidebar() {
                         </div>
 
                         <div className="overflow-hidden">
-                            <p className="text-sm font-medium text-white truncate group-hover:text-[#F24405] transition-colors">
+                            <p className="text-sm font-medium text-white truncate group-hover:text-[#1F51FF] transition-colors">
                                 {user?.full_name || 'Administrador'}
                             </p>
                             <p className="text-xs text-gray-500 truncate" title={user?.email}>

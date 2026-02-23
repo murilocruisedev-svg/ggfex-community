@@ -79,7 +79,7 @@ export default function AudiosPage() {
                     <h1 className="text-3xl font-bold tracking-tight">Meus Áudios</h1>
                     <p className="text-gray-400 mt-1">Gerencie e organize sua biblioteca de efeitos sonoros.</p>
                 </div>
-                <Link href="/painel/upload" className="flex items-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-orange-500/20 hover:scale-105">
+                <Link href="/painel/upload" className="flex items-center gap-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:scale-105">
                     <Plus className="w-5 h-5" />
                     Novo Upload
                 </Link>
@@ -96,7 +96,7 @@ export default function AudiosPage() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-300">Nenhum áudio encontrado</h3>
                         <p className="text-gray-500 max-w-md">Você ainda não subiu nenhum efeito sonoro. Clique em "Novo Upload" para começar.</p>
-                        <Link href="/painel/upload" className="text-[#F24405] font-bold hover:underline">
+                        <Link href="/painel/upload" className="text-[#1F51FF] font-bold hover:underline">
                             Começar Agora
                         </Link>
                     </div>
@@ -116,11 +116,11 @@ export default function AudiosPage() {
                                     <tr key={audio.id} className="hover:bg-white/[0.02] transition-colors group">
                                         <td className="p-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[#F24405] group-hover:bg-[#F24405] group-hover:text-white transition-colors">
+                                                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[#1F51FF] group-hover:bg-[#1F51FF] group-hover:text-white transition-colors">
                                                     <Music className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-white group-hover:text-[#F24405] transition-colors">{audio.name}</p>
+                                                    <p className="font-bold text-white group-hover:text-[#1F51FF] transition-colors">{audio.name}</p>
                                                     <p className="text-xs text-gray-500 truncate max-w-[200px]">{audio.file_url.split('/').pop()}</p>
                                                 </div>
                                             </div>

@@ -121,7 +121,7 @@ export function Sidebar() {
                                     className={cn(
                                         "flex items-center px-4 py-3 text-sm font-bold rounded-xl transition-all group border",
                                         isActive
-                                            ? "bg-[#F24405] text-white border-[#F24405] shadow-lg shadow-orange-500/20"
+                                            ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-lg shadow-blue-600/20"
                                             : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent"
                                     )}
                                 >
@@ -169,13 +169,13 @@ export function Sidebar() {
                                             "flex items-center px-4 py-2.5 text-sm font-medium transition-all group relative overflow-hidden",
                                             // Efeito de Seleção Lateral Laranja
                                             isActive
-                                                ? "border-l-2 border-[#F24405] bg-gradient-to-r from-[#F24405]/10 to-transparent text-[#F24405]"
+                                                ? "border-l-2 border-[#1F51FF] bg-gradient-to-r from-[#1F51FF]/10 to-transparent text-[#1F51FF]"
                                                 : "border-l-2 border-transparent text-gray-400 hover:text-white hover:bg-white/5"
                                         )}
                                     >
                                         <Folder className={cn(
                                             "w-4 h-4 mr-3 transition-colors",
-                                            isActive ? "text-[#F24405] fill-[#F24405]/20" : "text-gray-600 group-hover:text-gray-400"
+                                            isActive ? "text-[#1F51FF] fill-[#1F51FF]/20" : "text-gray-600 group-hover:text-gray-400"
                                         )} />
                                         <span className={cn("relative z-10", isActive && "font-bold")}>{category.name}</span>
                                     </Link>
@@ -196,17 +196,17 @@ export function Sidebar() {
                     >
                         {/* Avatar Placeholder com Gradiente */}
                         {user.avatar_url ? (
-                            <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-orange-500/10 flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shadow-lg shadow-blue-600/10 flex-shrink-0">
                                 <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                             </div>
                         ) : (
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F24405] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-orange-500/20 flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1F51FF] to-[#FFCEC2] flex items-center justify-center text-[#050505] font-bold text-lg shadow-lg shadow-blue-600/20 flex-shrink-0">
                                 {user.full_name?.[0].toUpperCase() || 'U'}
                             </div>
                         )}
 
                         <div className="flex-1 overflow-hidden min-w-0">
-                            <p className="text-sm font-bold text-white truncate group-hover:text-[#F24405] transition-colors">
+                            <p className="text-sm font-bold text-white truncate group-hover:text-[#1F51FF] transition-colors">
                                 {user.full_name}
                             </p>
                             <div className="flex items-center text-xs text-gray-500 mt-0.5">

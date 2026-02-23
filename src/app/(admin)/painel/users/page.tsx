@@ -288,7 +288,7 @@ export default function UsersPage() {
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="flex items-center gap-2 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold py-2 px-4 rounded-xl shadow-lg shadow-orange-500/20 transition-transform hover:scale-105 active:scale-95 text-sm"
+                        className="flex items-center gap-2 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold py-2 px-4 rounded-xl shadow-lg shadow-blue-600/20 transition-transform hover:scale-105 active:scale-95 text-sm"
                     >
                         <Plus className="w-4 h-4" />
                         Novo Assinante
@@ -306,7 +306,7 @@ export default function UsersPage() {
                                 className={cn(
                                     "px-4 py-1.5 rounded-lg text-xs font-bold transition-all",
                                     statusFilter === filter.id
-                                        ? "bg-[#F24405] text-white shadow-lg shadow-orange-500/20"
+                                        ? "bg-[#1F51FF] text-white shadow-lg shadow-blue-600/20"
                                         : "text-gray-500 hover:text-white"
                                 )}
                             >
@@ -325,7 +325,7 @@ export default function UsersPage() {
                     placeholder="Buscar por nome, email ou ID..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#F24405]/50 focus:ring-1 focus:ring-[#F24405]/50 transition-all shadow-input"
+                    className="w-full bg-[#111] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#1F51FF]/50 focus:ring-1 focus:ring-[#1F51FF]/50 transition-all shadow-input"
                 />
             </div>
 
@@ -333,7 +333,7 @@ export default function UsersPage() {
             <div className="bg-[#111] border border-white/5 rounded-3xl overflow-hidden shadow-2xl pb-4 min-h-[400px]">
                 {loading ? (
                     <div className="p-12 text-center text-gray-500 animate-pulse flex flex-col items-center">
-                        <div className="w-8 h-8 border-2 border-[#F24405] border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <div className="w-8 h-8 border-2 border-[#1F51FF] border-t-transparent rounded-full animate-spin mb-4"></div>
                         Carregando...
                     </div>
                 ) : filteredUsers.length === 0 ? (
@@ -367,7 +367,7 @@ export default function UsersPage() {
                                                     )}
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <p className="font-semibold text-white truncate group-hover:text-[#F24405] transition-colors max-w-[200px]" title={user.full_name || ''}>
+                                                    <p className="font-semibold text-white truncate group-hover:text-[#1F51FF] transition-colors max-w-[200px]" title={user.full_name || ''}>
                                                         {user.full_name || 'Sem nome'}
                                                     </p>
                                                     <p className="text-xs text-gray-500 truncate font-mono max-w-[200px]" title={user.email}>
@@ -477,7 +477,7 @@ export default function UsersPage() {
                     <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in zoom-in-95">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                <Lock className="w-5 h-5 text-[#F24405]" /> Alterar Senha
+                                <Lock className="w-5 h-5 text-[#1F51FF]" /> Alterar Senha
                             </h3>
                             <button onClick={() => setShowPasswordModal(null)} className="text-gray-500 hover:text-white">
                                 <X className="w-5 h-5" />
@@ -489,7 +489,7 @@ export default function UsersPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Nova Senha</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Digite a nova senha..."
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
@@ -498,7 +498,7 @@ export default function UsersPage() {
                             <button
                                 onClick={handleChangePassword}
                                 disabled={actionLoading || !newPassword}
-                                className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all"
+                                className="w-full py-3 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all"
                             >
                                 {actionLoading ? 'Salvando...' : 'Salvar Nova Senha'}
                             </button>
@@ -513,7 +513,7 @@ export default function UsersPage() {
                     <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in zoom-in-95">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                <Plus className="w-6 h-6 text-[#F24405]" /> Novo Assinante
+                                <Plus className="w-6 h-6 text-[#1F51FF]" /> Novo Assinante
                             </h3>
                             <button onClick={() => setShowCreateModal(false)} className="text-gray-500 hover:text-white">
                                 <X className="w-5 h-5" />
@@ -525,7 +525,7 @@ export default function UsersPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">Nome Completo</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Ex: João da Silva"
                                     value={newSubscriber.name}
                                     onChange={(e) => setNewSubscriber({ ...newSubscriber, name: e.target.value })}
@@ -535,7 +535,7 @@ export default function UsersPage() {
                                 <label className="block text-sm font-medium text-gray-400 mb-1">E-mail</label>
                                 <input
                                     type="email"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#F24405] outline-none"
+                                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#1F51FF] outline-none"
                                     placeholder="Ex: joao@email.com"
                                     value={newSubscriber.email}
                                     onChange={(e) => setNewSubscriber({ ...newSubscriber, email: e.target.value })}
@@ -544,7 +544,7 @@ export default function UsersPage() {
                             <button
                                 onClick={handleCreateSubscriber}
                                 disabled={actionLoading || !newSubscriber.email || !newSubscriber.name}
-                                className="w-full py-3 bg-[#F24405] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-3 bg-[#1F51FF] hover:bg-[#D93D04] text-white font-bold rounded-xl disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                             >
                                 {actionLoading ? (
                                     <>Criando...</>
