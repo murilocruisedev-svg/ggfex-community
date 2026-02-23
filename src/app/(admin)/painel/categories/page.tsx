@@ -36,6 +36,19 @@ export default function CategoriesPage() {
         setLoading(false);
     }
 
+    // Auxiliar para gerar slug
+    function slugify(text: string) {
+        return text
+            .toString()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-');
+    }
+
     // Criar nova categoria
     async function handleCreateCategory(e: React.FormEvent) {
         e.preventDefault();
@@ -43,15 +56,20 @@ export default function CategoriesPage() {
 
         setCreating(true);
         try {
-            const { error } = await supabase
-                .from("categories")
-                .insert([{ name: newCategory.trim() } as any]);
+            const name = newCategory.trim();
+            const slug = slugify(name);
+
+            const { error } = await (supabase
+                .from("categories") as any)
+                .insert([{
+                    name,
+                    slug
+                }]);
 
             if (error) throw error;
 
             setNewCategory("");
             fetchCategories(); // Recarrega a lista
-            // alert("Categoria criada com sucesso!"); // Opcional
         } catch (error: any) {
             alert("Erro ao criar categoria: " + error.message);
         } finally {
