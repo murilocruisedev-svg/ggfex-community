@@ -172,16 +172,60 @@ export default function BibliotecaPage() {
         }
     }
 
-    // ── delete category ──
+    // ── delete category + all associated audios ──
     async function handleDeleteCategory(id: number) {
-        if (!confirm("Tem certeza? Isso NÃO exclui os áudios, mas eles perderão a categoria.")) return;
+        // 1. Buscar todos os áudios desta categoria
+        const { data: sounds, error: fetchError } = await (supabase
+            .from("sound_effects") as any)
+            .select("id, file_url")
+            .eq("category_id", id);
+
+        if (fetchError) {
+            console.error("Erro ao buscar áudios da categoria:", fetchError);
+            alert("Erro ao verificar áudios da categoria. Tente novamente.");
+            return;
+        }
+
+        const audioCount = sounds?.length || 0;
+        const catName = categories.find(c => c.id === id)?.name || "categoria";
+
+        const confirmMsg = audioCount > 0
+            ? `⚠️ ATENÇÃO: Ao excluir "${catName}", ${audioCount} áudio(s) serão EXCLUÍDOS PERMANENTEMENTE do storage e do banco.\n\nDeseja continuar?`
+            : `Excluir a categoria "${catName}"?`;
+
+        if (!confirm(confirmMsg)) return;
 
         try {
+            // 2. Deletar arquivos do Storage
+            if (sounds && sounds.length > 0) {
+                const fileNames = sounds
+                    .map((s: any) => {
+                        if (!s.file_url) return null;
+                        const parts = s.file_url.split("/sound-effects/");
+                        return parts.length > 1 ? parts[1] : null;
+                    })
+                    .filter(Boolean) as string[];
+
+                if (fileNames.length > 0) {
+                    await supabase.storage.from("sound-effects").remove(fileNames);
+                }
+
+                // 3. Deletar registros de áudio do banco
+                await supabase.from("sound_effects").delete().eq("category_id", id);
+            }
+
+            // 4. Deletar a categoria
             const { error } = await supabase.from("categories").delete().eq("id", id);
             if (error) throw error;
+
             setCategories((prev) => prev.filter((c) => c.id !== id));
-        } catch {
-            alert("Erro ao excluir. Verifique se não há áudios usando esta categoria.");
+            if (selectedCategory?.id === id) {
+                setSelectedCategory(null);
+                setAudios([]);
+            }
+            alert(`✅ Categoria "${catName}" excluída${audioCount > 0 ? ` com ${audioCount} áudio(s)` : ""}.`);
+        } catch (err: any) {
+            alert("Erro ao excluir: " + (err.message || "Tente novamente."));
         }
     }
 

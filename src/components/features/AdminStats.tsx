@@ -30,26 +30,24 @@ export default function AdminStats() {
                 .eq("subscription_status", "active")
                 .neq("role", "admin"); // Garante que Admin nunca conta como assinante $$$
 
-            // 3. Contar Áudios (sem head:true para evitar RLS edge case)
-            const { count: audioCount, data: audioData, error: audioError } = await supabase
+            // 3. Contar Áudios
+            const { count: audioCount, error: audioError } = await supabase
                 .from("sound_effects")
-                .select("id", { count: "exact" });
+                .select("*", { count: "exact", head: true });
 
             if (audioError) {
                 console.error("Erro ao contar áudios:", audioError);
             }
 
-            const finalAudioCount = audioCount ?? audioData?.length ?? 0;
-
-            // * Receita Estimada (Ex: R$ 29,90 * Assinantes Reais)
+            // * Receita Estimada
             const revenue = (subCount || 0) * 29.90;
 
-            console.log("Stats debug:", { userCount, subCount, audioCount: finalAudioCount, revenue, audioError });
+            console.log("Stats debug:", { userCount, subCount, audioCount, revenue, audioError });
 
             setStats({
                 users: userCount || 0,
                 activeSubs: subCount || 0,
-                audios: finalAudioCount,
+                audios: audioCount || 0,
                 revenue: revenue || 0,
             });
             setLoading(false);
