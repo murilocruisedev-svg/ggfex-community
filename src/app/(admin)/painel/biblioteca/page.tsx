@@ -81,30 +81,18 @@ export default function BibliotecaPage() {
     const fetchCategories = useCallback(async () => {
         setLoading(true);
         try {
-            // Get categories
+            // Get categories with sound count using child relationship (Supabase way)
             const { data: cats, error } = await supabase
                 .from("categories")
-                .select("*")
+                .select("*, sound_effects(count)")
                 .order("name", { ascending: true });
 
             if (error) throw error;
 
-            // Get counts per category
-            const { data: countData } = await (supabase
-                .from("sound_effects") as any)
-                .select("category_id", { count: "exact", head: false });
-
-            const countMap: Record<number, number> = {};
-            if (countData) {
-                for (const row of countData) {
-                    countMap[row.category_id] = (countMap[row.category_id] || 0) + 1;
-                }
-            }
-
             setCategories(
                 (cats || []).map((c: any) => ({
                     ...c,
-                    audio_count: countMap[c.id] || 0,
+                    audio_count: c.sound_effects?.[0]?.count || 0,
                 }))
             );
         } catch (e) {
