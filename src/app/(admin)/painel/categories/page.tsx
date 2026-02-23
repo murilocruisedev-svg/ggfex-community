@@ -77,11 +77,55 @@ export default function CategoriesPage() {
         }
     }
 
-    // Excluir categoria
-    async function handleDeleteCategory(id: number) {
-        if (!confirm("Tem certeza que deseja excluir esta categoria?")) return;
+    // Excluir categoria + todos os áudios associados
+    async function handleDeleteCategory(id: number, categoryName: string) {
+        // 1. Buscar quantos áudios pertencem a esta categoria
+        const { data: sounds } = await (supabase
+            .from("sound_effects") as any)
+            .select("id, file_url")
+            .eq("category_id", id);
+
+        const audioCount = sounds?.length || 0;
+
+        const confirmMsg = audioCount > 0
+            ? `⚠️ ATENÇÃO: Ao excluir "${categoryName}", ${audioCount} áudio(s) serão excluídos permanentemente.\n\nDeseja continuar?`
+            : `Tem certeza que deseja excluir a categoria "${categoryName}"?`;
+
+        if (!confirm(confirmMsg)) return;
 
         try {
+            // 2. Se houver áudios, deletar do Storage e do banco
+            if (sounds && sounds.length > 0) {
+                // 2.1 Deletar arquivos do Storage
+                const fileNames = sounds
+                    .map((s: any) => {
+                        if (!s.file_url) return null;
+                        // Extrair nome do arquivo da URL pública
+                        const parts = s.file_url.split("/sound-effects/");
+                        return parts.length > 1 ? parts[1] : null;
+                    })
+                    .filter(Boolean) as string[];
+
+                if (fileNames.length > 0) {
+                    const { error: storageError } = await supabase.storage
+                        .from("sound-effects")
+                        .remove(fileNames);
+
+                    if (storageError) {
+                        console.error("Erro ao deletar arquivos do storage:", storageError);
+                    }
+                }
+
+                // 2.2 Deletar registros dos áudios no banco
+                const { error: deleteAudioError } = await supabase
+                    .from("sound_effects")
+                    .delete()
+                    .eq("category_id", id);
+
+                if (deleteAudioError) throw deleteAudioError;
+            }
+
+            // 3. Deletar a categoria
             const { error } = await supabase
                 .from("categories")
                 .delete()
@@ -90,8 +134,9 @@ export default function CategoriesPage() {
             if (error) throw error;
 
             setCategories(categories.filter((cat) => cat.id !== id));
+            alert(`✅ Categoria "${categoryName}" excluída${audioCount > 0 ? ` com ${audioCount} áudio(s)` : ""}.`);
         } catch (error: any) {
-            alert("Erro ao excluir. Verifique se não há áudios usando esta categoria.");
+            alert("Erro ao excluir: " + error.message);
         }
     }
 
@@ -151,7 +196,7 @@ export default function CategoriesPage() {
                             </div>
 
                             <button
-                                onClick={() => handleDeleteCategory(category.id)}
+                                onClick={() => handleDeleteCategory(category.id, category.name)}
                                 className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                                 title="Excluir Categoria"
                             >
