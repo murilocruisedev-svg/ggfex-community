@@ -129,40 +129,32 @@ export default function HomePage() {
 
             {/* Lista Completa de Sons - Grid Premium (Ajustado Mobile) */}
             <section>
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 pb-4 border-b border-white/5 gap-4 md:gap-0">
+                <div className="mb-8 md:mb-10 space-y-6">
+                    {/* Título */}
                     <div>
-                        <h2 className="text-xl md:text-2xl text-white font-serif italic flex items-center gap-3">
+                        <h2 className="text-2xl md:text-3xl text-white font-bold tracking-tight flex items-center gap-3">
+                            <Music className="w-6 h-6 text-[#1F51FF]" />
                             Galeria Completa
-                            <span className="text-[10px] md:text-xs font-sans font-bold text-[#1F51FF] bg-[#1F51FF]/10 px-2 py-1 rounded border border-[#1F51FF]/20 not-italic">
-                                {filteredSounds.length} Assets
-                            </span>
                         </h2>
-                        <p className="text-xs md:text-sm text-gray-500 mt-1 md:mt-2 font-medium tracking-wide">
-                            Explore nossa biblioteca curada de alta fidelidade.
+                        <p className="text-sm text-gray-500 mt-2 ml-9">
+                            {filteredSounds.length} efeitos sonoros disponíveis
                         </p>
                     </div>
 
-                    {/* Filtros Mobile (Scroll Horizontal se precisar) */}
-                    <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-                        {/* Botão Todos */}
+                    {/* Filtros de Categoria */}
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide ml-9">
                         <button
                             onClick={() => setSelectedCategoryId(null)}
                             className={cn(
-                                "group relative flex items-center justify-center px-6 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 border flex-shrink-0",
+                                "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 whitespace-nowrap border",
                                 selectedCategoryId === null
-                                    ? "bg-white/5 text-white border-white/5 shadow-inner"
-                                    : "bg-[#0F0F0F] text-gray-400 border-white/5 hover:text-white hover:bg-white/[0.03]"
+                                    ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-[0_0_16px_rgba(31,81,255,0.3)]"
+                                    : "bg-white/5 text-gray-400 border-white/10 hover:text-white hover:bg-white/10"
                             )}
                         >
-                            {selectedCategoryId === null && (
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF] animate-in slide-in-from-left-2 duration-300" />
-                            )}
-                            <span className={cn("transition-transform duration-300", selectedCategoryId === null ? "translate-x-1 text-[#1F51FF]" : "group-hover:translate-x-0.5")}>
-                                Todos
-                            </span>
+                            Todos
                         </button>
 
-                        {/* Botões de Categoria */}
                         {categories.map((category) => {
                             const isActive = selectedCategoryId === category.id;
                             return (
@@ -170,18 +162,13 @@ export default function HomePage() {
                                     key={category.id}
                                     onClick={() => setSelectedCategoryId(category.id)}
                                     className={cn(
-                                        "group relative flex items-center justify-center px-6 py-3.5 rounded-xl text-xs font-bold transition-all duration-300 border flex-shrink-0",
+                                        "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 whitespace-nowrap border",
                                         isActive
-                                            ? "bg-white/5 text-white border-white/5 shadow-inner"
-                                            : "bg-[#0F0F0F] text-gray-400 border-white/5 hover:text-white hover:bg-white/[0.03]"
+                                            ? "bg-[#1F51FF] text-white border-[#1F51FF] shadow-[0_0_16px_rgba(31,81,255,0.3)]"
+                                            : "bg-white/5 text-gray-400 border-white/10 hover:text-white hover:bg-white/10"
                                     )}
                                 >
-                                    {isActive && (
-                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF] animate-in slide-in-from-left-2 duration-300" />
-                                    )}
-                                    <span className={cn("transition-transform duration-300", isActive ? "translate-x-1 text-[#1F51FF]" : "group-hover:translate-x-0.5")}>
-                                        {category.name}
-                                    </span>
+                                    {category.name}
                                 </button>
                             );
                         })}
