@@ -94,9 +94,9 @@ export function AdminSidebar() {
     return (
         <aside className="h-full w-full flex flex-col bg-[#0A0A0A] border-r border-[#222] shadow-[4px_0_24px_rgba(0,0,0,0.4)]">
             {/* Header / Logo Area */}
-            <div className="h-24 flex items-center px-8 border-b border-[#1A1A1A]/80 bg-[#0A0A0A]">
+            <div className="h-28 flex items-center px-8 border-b border-[#1A1A1A]/80 bg-[#0A0A0A]">
                 <Link href="/" className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80">
-                    <Logo className="text-4xl" />
+                    <Logo className="text-5xl" />
                 </Link>
             </div>
 
