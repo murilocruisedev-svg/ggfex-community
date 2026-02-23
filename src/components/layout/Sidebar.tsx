@@ -100,8 +100,8 @@ export function Sidebar() {
     return (
         <div className="h-full bg-[#050505] flex flex-col border-r border-white/5">
             {/* Header */}
-            <div className="p-6 shrink-0">
-                <Link href="/" className="inline-block">
+            <div className="p-6 shrink-0 flex justify-center">
+                <Link href="/">
                     <Logo className="text-2xl" />
                 </Link>
             </div>
