@@ -1,17 +1,13 @@
 import { cn } from '@/lib/utils';
 
 export function Logo({ className }: { className?: string }) {
-    // Busca a imagem da pasta /public/logo.png
-    const logoUrl = "/logo.png";
-
     return (
         <div className={cn("flex items-center justify-center overflow-hidden", className)}>
             <img
-                src={logoUrl}
+                src="/logo.png"
                 alt="GFEX Logo"
-                className="h-full w-auto object-contain mix-blend-screen brightness-110 contrast-125 invert"
-                style={{ filter: 'invert(1) hue-rotate(180deg)' }}
-                // Esconde a imagem quebrada se o arquivo logo.png ainda não estiver lá
+                className="h-full w-auto object-contain"
+                style={{ filter: 'invert(1) hue-rotate(180deg)', mixBlendMode: 'screen' }}
                 onError={(e) => {
                     e.currentTarget.style.display = 'none';
                 }}
@@ -19,3 +15,4 @@ export function Logo({ className }: { className?: string }) {
         </div>
     );
 }
+
