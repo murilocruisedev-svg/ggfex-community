@@ -102,7 +102,7 @@ export function Sidebar() {
             {/* Header */}
             <div className="p-6">
                 <Link href="/" className="inline-block">
-                    <Logo className="h-8" />
+                    <Logo className="text-2xl" />
                 </Link>
             </div>
 

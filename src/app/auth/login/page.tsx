@@ -128,7 +128,7 @@ export default function LoginPage() {
 
                 {/* Header */}
                 <div className="flex flex-col items-center justify-center mb-8">
-                    <Logo className="h-24 w-auto mb-4" />
+                    <Logo className="text-6xl mb-4" />
                     <div className="text-center">
                         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
                             Bem-vindo(a)

@@ -48,7 +48,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                             <Menu className="h-6 w-6" />
                         </button>
                         <Link href="/">
-                            <Logo className="h-6" />
+                            <Logo className="text-xl" />
                         </Link>
                     </div>
                     <button
