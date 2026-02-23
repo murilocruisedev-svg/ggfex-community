@@ -142,8 +142,14 @@ export function Sidebar() {
                 </Link>
             </div>
 
-            {/* Categorias - SCROLLÁVEL */}
-            <div className="flex-1 min-h-0 overflow-y-auto px-4 mt-6">
+            {/* Categorias - SCROLLÁVEL com efeito de fade */}
+            <div
+                className="flex-1 min-h-0 overflow-y-auto px-4 mt-6"
+                style={{
+                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)',
+                }}
+            >
                 <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2 sticky top-0 bg-[#050505] py-2 z-10">
                     <Layers className="w-3 h-3" />
                     Categorias
