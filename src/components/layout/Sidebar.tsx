@@ -3,7 +3,7 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Home, MessageCircle, Music, Zap, Layers, Volume2, Globe, User, Settings, LogOut, Folder } from 'lucide-react'
+import { Home, MessageCircle, Music, Zap, Layers, Volume2, Globe, User, Settings, LogOut, Folder, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -171,17 +171,23 @@ export function Sidebar() {
                                     key={category.id}
                                     href={`/library?category=${category.slug}`}
                                     className={cn(
-                                        "flex items-center px-4 py-2.5 text-sm font-medium transition-all group relative overflow-hidden",
+                                        "group relative flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 border border-transparent",
                                         isActive
-                                            ? "border-l-2 border-[#1F51FF] bg-gradient-to-r from-[#1F51FF]/10 to-transparent text-[#1F51FF]"
-                                            : "border-l-2 border-transparent text-gray-400 hover:text-white hover:bg-white/5"
+                                            ? "bg-white/5 text-white border-white/5 shadow-inner"
+                                            : "text-gray-400 hover:text-white hover:bg-white/[0.03]"
                                     )}
                                 >
+                                    {isActive && (
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-[#1F51FF] rounded-r-full shadow-[0_0_12px_#1F51FF]" />
+                                    )}
                                     <Folder className={cn(
-                                        "w-4 h-4 mr-3 transition-colors",
-                                        isActive ? "text-[#1F51FF] fill-[#1F51FF]/20" : "text-gray-600 group-hover:text-gray-400"
+                                        "w-4 h-4 mr-3 transition-all duration-300 group-hover:scale-110",
+                                        isActive ? "text-[#1F51FF] fill-[#1F51FF]/20" : "text-gray-500 group-hover:text-gray-300"
                                     )} />
-                                    <span className={cn("relative z-10", isActive && "font-bold")}>{category.name}</span>
+                                    <span className="flex-1">{category.name}</span>
+                                    {isActive && (
+                                        <ChevronRight className="w-4 h-4 text-[#1F51FF]" />
+                                    )}
                                 </Link>
                             )
                         })
