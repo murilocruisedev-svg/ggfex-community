@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, Suspense, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { AudioCard } from '@/components/ui/AudioCard'
 import { supabase } from '@/lib/supabase/client'
@@ -84,15 +84,17 @@ function HomeContent() {
     }, [])
 
     // Filtrar por categoria e busca
-    const filteredSounds = allSounds.filter(s => {
-        const matchesCategory = selectedCategoryId ? s.category_id === selectedCategoryId : true
-        const matchesSearch = searchQuery
-            ? s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (s.description && s.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (s.tags && s.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
-            : true
-        return matchesCategory && matchesSearch
-    });
+    const filteredSounds = useMemo(() => {
+        return allSounds.filter((s: SoundEffect) => {
+            const matchesCategory = selectedCategoryId ? s.category_id === selectedCategoryId : true
+            const matchesSearch = searchQuery
+                ? s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (s.description && s.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (s.tags && s.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+                : true
+            return matchesCategory && matchesSearch
+        });
+    }, [allSounds, selectedCategoryId, searchQuery]);
 
     const isSearching = searchQuery.length > 0;
 

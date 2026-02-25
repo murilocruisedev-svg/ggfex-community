@@ -5,6 +5,7 @@ import * as THREE from "three"
 
 export function WebGLShader() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const isVisible = useRef(true)
     const sceneRef = useRef<{
         scene: THREE.Scene | null
         camera: THREE.OrthographicCamera | null
@@ -26,6 +27,15 @@ export function WebGLShader() {
 
         const canvas = canvasRef.current
         const { current: refs } = sceneRef
+
+        // Intersection Observer to pause animation when not visible
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isVisible.current = entry.isIntersecting
+            },
+            { threshold: 0 }
+        )
+        observer.observe(canvas)
 
         const vertexShader = `
       attribute vec3 position;
@@ -61,12 +71,13 @@ export function WebGLShader() {
 
         const initScene = () => {
             refs.scene = new THREE.Scene()
-            refs.renderer = new THREE.WebGLRenderer({ canvas, alpha: true }) // Added alpha: true for transparency usage
-            refs.renderer.setPixelRatio(window.devicePixelRatio)
-            // Make background default to transparent so CSS controls it if needed, or black in shader
-            // The fragment shader does not use alpha, so it covers everything unless we discard or mix.
-            // But the shader logic sets gl_FragColor fully opaque. 
-            // Let's keep it as is from user code, but maybe handle canvas styling via className.
+            refs.renderer = new THREE.WebGLRenderer({
+                canvas,
+                alpha: true,
+                powerPreference: "low-power", // Optimize for power saving
+                antialias: false // Reduce GPU load
+            })
+            refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Cap pixel ratio for performance
 
             refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
 
@@ -105,11 +116,15 @@ export function WebGLShader() {
         }
 
         const animate = () => {
+            refs.animationId = requestAnimationFrame(animate)
+
+            // Only render if visible
+            if (!isVisible.current) return
+
             if (refs.uniforms) refs.uniforms.time.value += 0.01
             if (refs.renderer && refs.scene && refs.camera) {
                 refs.renderer.render(refs.scene, refs.camera)
             }
-            refs.animationId = requestAnimationFrame(animate)
         }
 
         const handleResize = () => {
@@ -127,6 +142,8 @@ export function WebGLShader() {
         return () => {
             if (refs.animationId) cancelAnimationFrame(refs.animationId)
             window.removeEventListener("resize", handleResize)
+            observer.disconnect()
+
             if (refs.mesh) {
                 refs.scene?.remove(refs.mesh)
                 refs.mesh.geometry.dispose()
@@ -141,7 +158,7 @@ export function WebGLShader() {
     return (
         <canvas
             ref={canvasRef}
-            className="fixed top-0 left-0 w-full h-full block -z-10 pointer-events-none" // Added z-index and pointer-events
+            className="fixed top-0 left-0 w-full h-full block -z-10 pointer-events-none will-change-transform"
         />
     )
 }
