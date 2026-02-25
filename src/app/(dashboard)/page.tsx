@@ -32,6 +32,7 @@ function HomeContent() {
     const [categories, setCategories] = useState<Category[]>([])
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
     const [loading, setLoading] = useState(true)
+    const [visibleCount, setVisibleCount] = useState(12)
     const [user, setUser] = useState<any>(null)
 
     useEffect(() => {
@@ -210,17 +211,31 @@ function HomeContent() {
                         ))}
                     </div>
                 ) : filteredSounds.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 pb-20">
-                        {filteredSounds.map((sound, index) => (
-                            <div
-                                key={sound.id}
-                                className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
-                                style={{ animationDelay: `${index * 0.05}s` }}
-                            >
-                                <AudioCard sound={sound} isLocked={!user} />
+                    <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 pb-8">
+                            {filteredSounds.slice(0, visibleCount).map((sound: SoundEffect, index: number) => (
+                                <div
+                                    key={sound.id}
+                                    className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+                                    style={{ animationDelay: `${(index % 12) * 0.05}s` }}
+                                >
+                                    <AudioCard sound={sound} isLocked={!user} />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Load More Button */}
+                        {visibleCount < filteredSounds.length && (
+                            <div className="flex justify-center pb-20">
+                                <button
+                                    onClick={() => setVisibleCount(prev => prev + 12)}
+                                    className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl transition-all font-semibold text-sm active:scale-95"
+                                >
+                                    Carregar Mais Sons
+                                </button>
                             </div>
-                        ))}
-                    </div>
+                        )}
+                    </>
                 ) : (
                     <div className="flex flex-col items-center justify-center p-12 md:p-32 bg-[#0A0A0A] rounded-3xl border border-white/5">
                         {isSearching ? (

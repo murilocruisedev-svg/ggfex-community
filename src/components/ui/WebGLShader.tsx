@@ -28,7 +28,6 @@ export function WebGLShader() {
         const canvas = canvasRef.current
         const { current: refs } = sceneRef
 
-        // Intersection Observer to pause animation when not visible
         const observer = new IntersectionObserver(
             ([entry]) => {
                 isVisible.current = entry.isIntersecting
@@ -70,14 +69,17 @@ export function WebGLShader() {
     `
 
         const initScene = () => {
+            const isMobile = window.innerWidth < 768;
             refs.scene = new THREE.Scene()
             refs.renderer = new THREE.WebGLRenderer({
                 canvas,
                 alpha: true,
-                powerPreference: "low-power", // Optimize for power saving
-                antialias: false // Reduce GPU load
+                powerPreference: "low-power",
+                antialias: false
             })
-            refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Cap pixel ratio for performance
+
+            // Aggressively cap pixel ratio on mobile to 1.0 for performance
+            refs.renderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio, 2))
 
             refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
 
@@ -98,9 +100,8 @@ export function WebGLShader() {
                 1.0, 1.0, 0.0,
             ]
 
-            const positions = new THREE.BufferAttribute(new Float32Array(position), 3)
             const geometry = new THREE.BufferGeometry()
-            geometry.setAttribute("position", positions)
+            geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(position), 3))
 
             const material = new THREE.RawShaderMaterial({
                 vertexShader,
@@ -115,11 +116,18 @@ export function WebGLShader() {
             handleResize()
         }
 
+        let frameCount = 0;
         const animate = () => {
             refs.animationId = requestAnimationFrame(animate)
 
-            // Only render if visible
             if (!isVisible.current) return
+
+            // Skip frames on mobile to reduce CPU/GPU load (approx 30fps)
+            const isMobile = window.innerWidth < 768;
+            if (isMobile) {
+                frameCount++;
+                if (frameCount % 2 !== 0) return;
+            }
 
             if (refs.uniforms) refs.uniforms.time.value += 0.01
             if (refs.renderer && refs.scene && refs.camera) {
